@@ -3,9 +3,6 @@
     <string name="button_UpdateiCUE">Update iCUE</string>
     <string name="testView_instructions">Enter RGB Values Below</string>
     <string name="hint_RGBValInput">Enter RGB Value</string>
-    <string name="ButtonPickColor">Pick Color</string>
-    <string name="textViewPickedColor">Your picked color is:</string>
-    <string name="ButtonSetColor">Set Color</string>
     <string-array name="commands_spinner">
         <item>RGB_PULSE</item>
         <item>RGB_SOLID</item>
