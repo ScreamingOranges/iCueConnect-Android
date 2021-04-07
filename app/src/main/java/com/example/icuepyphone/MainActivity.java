@@ -1,6 +1,7 @@
 package com.example.icuepyphone;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -14,10 +15,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import top.defaults.colorpicker.ColorPickerPopup;
+
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private String inputRGB;
     private Context context;
+    private int DefaultColor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         context = getApplicationContext();
@@ -25,13 +29,34 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
         Pusher pusher = new Pusher("1179962", "3b584ee38d8b91d475cd", "21a33f11e65ee31bf618");
         pusher.setCluster("mt1");
-
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.commands_spinner, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.commandsSpinner.setAdapter(adapter);
+        DefaultColor = 0;
+
+        binding.pickColorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ColorPickerPopup.Builder(MainActivity.this)
+                    .initialColor(Color.GREEN)
+                    .enableBrightness(true)
+                    .enableAlpha(false)
+                    .okTitle("Choose")
+                    .cancelTitle("Cancel")
+                    .showIndicator(true)
+                    .showValue(false)
+                    .build()
+                    .show(v, new ColorPickerPopup.ColorPickerObserver() {
+                        @Override
+                        public void onColorPicked(int color) {
+                            DefaultColor = color;
+                            binding.previewSelectedColor.setBackgroundColor(DefaultColor);
+                        }
+                    });
+            }
+        });
 
         binding.buttonUpdateiCUE.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,16 +64,15 @@ public class MainActivity extends AppCompatActivity {
                 String chosenCommand = binding.commandsSpinner.getSelectedItem().toString();
                 inputRGB = binding.inputRGBVal.getText().toString();
                 String[] result = inputRGB.split("\\s+");
-
-                if(inputRGB.isEmpty()){
-                    Toast.makeText(context, "ENTER AN RGB VALUE", Toast.LENGTH_SHORT).show();
+                List<Integer> myList = new ArrayList<Integer>();
+                if((inputRGB.isEmpty()) && (DefaultColor == 0) ){
+                    Toast.makeText(context, "ENTER/CHOOSE AN RGB VALUE", Toast.LENGTH_SHORT).show();
                 }
-                else{
+                else if(DefaultColor == 0) {
                     Thread thread = new Thread(new Runnable() {
                         @Override
-                        public void run(){
-                            try{
-                                List<Integer> myList = new ArrayList<Integer>();
+                        public void run() {
+                            try {
                                 myList.add(Integer.parseInt(result[0]));
                                 myList.add(Integer.parseInt(result[1]));
                                 myList.add(Integer.parseInt(result[2]));
@@ -59,8 +83,28 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                     thread.start();
-                    Toast.makeText(context, inputRGB, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, ("INPUT VALUE:"+inputRGB), Toast.LENGTH_SHORT).show();
                 }
+                else{
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                myList.add(Color.red(DefaultColor));
+                                myList.add(Color.green(DefaultColor));
+                                myList.add(Color.blue(DefaultColor));
+                                pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap(chosenCommand, myList));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    thread.start();
+                    Toast.makeText(context, ("WHEEL VALUE:"+ DefaultColor), Toast.LENGTH_SHORT).show();
+                    DefaultColor = 0;
+                }
+                binding.previewSelectedColor.setBackgroundColor(-5592406);
+                binding.inputRGBVal.setText("");
             }
         });
     }
