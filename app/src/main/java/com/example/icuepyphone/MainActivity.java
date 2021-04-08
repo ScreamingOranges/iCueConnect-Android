@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                     thread.start();
-                    Toast.makeText(context, ("INPUT VALUE:"+inputRGB), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Sent To iCue", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Thread thread = new Thread(new Runnable() {
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                     thread.start();
-                    Toast.makeText(context, ("WHEEL VALUE:"+ DefaultColor), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Sent To iCue", Toast.LENGTH_SHORT).show();
                     DefaultColor = 0;
                 }
                 binding.previewSelectedColor.setBackgroundColor(-5592406);
