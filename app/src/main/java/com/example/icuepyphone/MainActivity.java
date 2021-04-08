@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import top.defaults.colorpicker.ColorObserver;
 import top.defaults.colorpicker.ColorPickerPopup;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,25 +37,12 @@ public class MainActivity extends AppCompatActivity {
         binding.commandsSpinner.setAdapter(adapter);
         DefaultColor = 0;
 
-        binding.pickColorButton.setOnClickListener(new View.OnClickListener() {
+        binding.colorPicker.setInitialColor(Color.GREEN);
+        binding.colorPicker.subscribe(new ColorObserver() {
             @Override
-            public void onClick(View v) {
-                new ColorPickerPopup.Builder(MainActivity.this)
-                    .initialColor(Color.GREEN)
-                    .enableBrightness(true)
-                    .enableAlpha(false)
-                    .okTitle("Choose")
-                    .cancelTitle("Cancel")
-                    .showIndicator(true)
-                    .showValue(false)
-                    .build()
-                    .show(v, new ColorPickerPopup.ColorPickerObserver() {
-                        @Override
-                        public void onColorPicked(int color) {
-                            DefaultColor = color;
-                            binding.previewSelectedColor.setBackgroundColor(DefaultColor);
-                        }
-                    });
+            public void onColor(int color, boolean fromUser, boolean shouldPropagate) {
+                DefaultColor = color;
+                binding.previewSelectedColor.setBackgroundColor(DefaultColor);
             }
         });
 
