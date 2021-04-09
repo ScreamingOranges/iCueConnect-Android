@@ -80,7 +80,14 @@ public class MainActivity extends AppCompatActivity {
                                 myList.add(Integer.parseInt(result[0]));
                                 myList.add(Integer.parseInt(result[1]));
                                 myList.add(Integer.parseInt(result[2]));
-                                pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap(chosenCommand, myList));
+                                switch (chosenCommand){
+                                    case "PULSE":
+                                        pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_PULSE", myList));
+                                        break;
+                                    case "SOLID":
+                                        pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
+                                        break;
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -88,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
                     });
                     thread.start();
                     Toast.makeText(context, "Sent To iCue", Toast.LENGTH_SHORT).show();
-                    myList.clear();
 
                 }
                 else{
@@ -96,10 +102,18 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             try {
+                                myList.clear();
                                 myList.add(Color.red(DefaultColor));
                                 myList.add(Color.green(DefaultColor));
                                 myList.add(Color.blue(DefaultColor));
-                                pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap(chosenCommand, myList));
+                                switch (chosenCommand){
+                                    case "PULSE":
+                                        pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_PULSE", myList));
+                                        break;
+                                    case "SOLID":
+                                        pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
+                                        break;
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -108,7 +122,6 @@ public class MainActivity extends AppCompatActivity {
                     thread.start();
                     Toast.makeText(context, "Sent To iCue", Toast.LENGTH_SHORT).show();
                     DefaultColor = 0;
-                    myList.clear();
                 }
                 binding.previewSelectedColor.setBackgroundColor(-5592406);
                 binding.inputRGBVal.setText("");

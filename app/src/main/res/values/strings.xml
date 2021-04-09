@@ -6,8 +6,9 @@
     <string name="button_PickColor">Pick Color</string>
     <string name="textViewPickedColor">Your picked color is:</string>
     <string-array name="commands_spinner">
-        <item>RGB_PULSE</item>
-        <item>RGB_SOLID</item>
+        <item>PULSE</item>
+        <item>SOLID</item>
+        <item>LIVE</item>
     </string-array>
 
 </resources>
