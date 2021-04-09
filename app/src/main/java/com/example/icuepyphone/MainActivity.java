@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private String inputRGB;
     private Context context;
     private int DefaultColor;
+    private List<Integer> myList = new ArrayList<Integer>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         context = getApplicationContext();
@@ -42,7 +43,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onColor(int color, boolean fromUser, boolean shouldPropagate) {
                 DefaultColor = color;
-                binding.previewSelectedColor.setBackgroundColor(DefaultColor);
+                binding.previewSelectedColor.setBackgroundColor(color);
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            myList.clear();
+                            myList.add(Color.red(color));
+                            myList.add(Color.green(color));
+                            myList.add(Color.blue(color));
+                            pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                thread.start();
             }
         });
 
@@ -52,15 +68,15 @@ public class MainActivity extends AppCompatActivity {
                 String chosenCommand = binding.commandsSpinner.getSelectedItem().toString();
                 inputRGB = binding.inputRGBVal.getText().toString();
                 String[] result = inputRGB.split("\\s+");
-                List<Integer> myList = new ArrayList<Integer>();
                 if((inputRGB.isEmpty()) && (DefaultColor == 0) ){
                     Toast.makeText(context, "ENTER/CHOOSE AN RGB VALUE", Toast.LENGTH_SHORT).show();
                 }
-                else if(DefaultColor == 0) {
+                else if(!inputRGB.isEmpty()) {
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
                             try {
+                                myList.clear();
                                 myList.add(Integer.parseInt(result[0]));
                                 myList.add(Integer.parseInt(result[1]));
                                 myList.add(Integer.parseInt(result[2]));
@@ -72,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
                     });
                     thread.start();
                     Toast.makeText(context, "Sent To iCue", Toast.LENGTH_SHORT).show();
+                    myList.clear();
+
                 }
                 else{
                     Thread thread = new Thread(new Runnable() {
@@ -90,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     thread.start();
                     Toast.makeText(context, "Sent To iCue", Toast.LENGTH_SHORT).show();
                     DefaultColor = 0;
+                    myList.clear();
                 }
                 binding.previewSelectedColor.setBackgroundColor(-5592406);
                 binding.inputRGBVal.setText("");
