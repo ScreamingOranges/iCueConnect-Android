@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private String inputRGB;
     private Context context;
     private int DefaultColor;
+    private String chosenCommand;
     private List<Integer> myList = new ArrayList<Integer>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +40,11 @@ public class MainActivity extends AppCompatActivity {
         DefaultColor = 0;
 
         binding.colorPicker.setInitialColor(Color.GREEN);
+
         binding.colorPicker.subscribe(new ColorObserver() {
             @Override
             public void onColor(int color, boolean fromUser, boolean shouldPropagate) {
+                chosenCommand = binding.commandsSpinner.getSelectedItem().toString();
                 DefaultColor = color;
                 binding.previewSelectedColor.setBackgroundColor(color);
                 Thread thread = new Thread(new Runnable() {
@@ -52,7 +55,10 @@ public class MainActivity extends AppCompatActivity {
                             myList.add(Color.red(color));
                             myList.add(Color.green(color));
                             myList.add(Color.blue(color));
-                            pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
+                            if(chosenCommand.equals("LIVE")){
+                                pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
+                            }
+                            System.out.println("Command:"+chosenCommand);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -65,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         binding.buttonUpdateiCUE.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String chosenCommand = binding.commandsSpinner.getSelectedItem().toString();
+                chosenCommand = binding.commandsSpinner.getSelectedItem().toString();
                 inputRGB = binding.inputRGBVal.getText().toString();
                 String[] result = inputRGB.split("\\s+");
                 if((inputRGB.isEmpty()) && (DefaultColor == 0) ){
