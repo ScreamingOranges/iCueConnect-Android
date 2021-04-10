@@ -5,6 +5,8 @@
     <string name="hint_RGBValInput">Enter RGB Value</string>
     <string name="button_PickColor">Pick Color</string>
     <string name="textViewPickedColor">Your picked color is:</string>
+    <string name="help">Help</string>
+    <string name="pusher_config">Pusher Configuration</string>
     <string-array name="commands_spinner">
         <item>PULSE</item>
         <item>SOLID</item>

@@ -3,10 +3,15 @@ package com.example.icuepyphone;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.icuepyphone.databinding.ActivityMainBinding;
 import com.pusher.rest.Pusher;
@@ -25,21 +30,46 @@ public class MainActivity extends AppCompatActivity {
     private int DefaultColor;
     private String chosenCommand;
     private List<Integer> myList = new ArrayList<Integer>();
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        context = getApplicationContext();
+        switch (item.getItemId()) {
+            case R.id.help:
+                Toast.makeText(context, "HELP", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.pusher_config:
+                Toast.makeText(context, "PUSHER", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Pusher pusher = new Pusher("1179962", "3b584ee38d8b91d475cd", "21a33f11e65ee31bf618");
+        pusher.setCluster("mt1");
         context = getApplicationContext();
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        Pusher pusher = new Pusher("1179962", "3b584ee38d8b91d475cd", "21a33f11e65ee31bf618");
-        pusher.setCluster("mt1");
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.commands_spinner, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.commandsSpinner.setAdapter(adapter);
         DefaultColor = 0;
-
         binding.colorPicker.setInitialColor(Color.GREEN);
+
+
 
         binding.colorPicker.subscribe(new ColorObserver() {
             @Override
