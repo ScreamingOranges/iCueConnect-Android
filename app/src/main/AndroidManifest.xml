@@ -13,8 +13,13 @@
         android:sharedUserId="android.uid.system"
         android:supportsRtl="true"
         android:theme="@style/Theme.ICuePyPhone">
-        <activity android:name=".PusherConfigActivity"></activity>
-        <activity android:name=".HelpActivity" />
+        <activity android:name=".PusherConfigActivity"
+            android:parentActivityName=".MainActivity">
+
+        </activity>
+        <activity android:name=".HelpActivity"
+            android:parentActivityName=".MainActivity">
+        </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
