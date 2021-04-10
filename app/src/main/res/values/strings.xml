@@ -7,6 +7,13 @@
     <string name="textViewPickedColor">Your picked color is:</string>
     <string name="help">Help</string>
     <string name="pusher_config">Pusher Configuration</string>
+    <string name="app_id">app_id:</string>
+    <string name="secret">secret:</string>
+    <string name="key">key:</string>
+    <string name="cluster">cluster:</string>
+    <string name="enter_pusher_credentials">Enter Pusher Credentials</string>
+    <string name="refer_to_the_help_page_for_instructions">Refer To The Help Page For Instructions</string>
+    <string name="save">Save</string>
     <string-array name="commands_spinner">
         <item>PULSE</item>
         <item>SOLID</item>
