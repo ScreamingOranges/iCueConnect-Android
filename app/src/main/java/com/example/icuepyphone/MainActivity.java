@@ -1,6 +1,8 @@
 package com.example.icuepyphone;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -44,9 +46,13 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.help:
                 Toast.makeText(context, "HELP", Toast.LENGTH_SHORT).show();
+                Intent help_intent = new Intent(this, HelpActivity.class);
+                startActivity(help_intent);
                 return true;
             case R.id.pusher_config:
                 Toast.makeText(context, "PUSHER", Toast.LENGTH_SHORT).show();
+                Intent pusher_config_intent = new Intent(this, PusherConfigActivity.class);
+                startActivity(pusher_config_intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
