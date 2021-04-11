@@ -45,12 +45,10 @@ public class MainActivity extends AppCompatActivity {
         context = getApplicationContext();
         switch (item.getItemId()) {
             case R.id.help:
-                Toast.makeText(context, "HELP", Toast.LENGTH_SHORT).show();
                 Intent help_intent = new Intent(this, HelpActivity.class);
                 startActivity(help_intent);
                 return true;
             case R.id.pusher_config:
-                Toast.makeText(context, "PUSHER", Toast.LENGTH_SHORT).show();
                 Intent pusher_config_intent = new Intent(this, PusherConfigActivity.class);
                 startActivity(pusher_config_intent);
                 return true;
