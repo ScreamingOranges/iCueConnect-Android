@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.example.icuepyphone.databinding.ActivityPusherConfigBinding;
 
+import java.util.ArrayList;
+
 public class PusherConfigActivity extends AppCompatActivity {
     private ActivityPusherConfigBinding binding;
     private Context context;
@@ -32,7 +34,18 @@ public class PusherConfigActivity extends AppCompatActivity {
 
         Cursor data = mDatabaseHelper.getData();
         if((data != null) && (data.getCount() > 0)){
-            //fill fields with data from data base123
+            ArrayList<String> listData = new ArrayList<>();
+            while(data.moveToNext()){
+                listData.add(data.getString(1));
+                listData.add(data.getString(2));
+                listData.add(data.getString(3));
+                listData.add(data.getString(4));
+            }
+            listData.forEach(System.out::println);
+            binding.inputAppId.setText(listData.get(0));
+            binding.inputKey.setText(listData.get(1));
+            binding.inputSecret.setText(listData.get(2));
+            binding.inputCluster.setText(listData.get(3));
         }
 
         binding.buttonSave.setOnClickListener(new View.OnClickListener() {
