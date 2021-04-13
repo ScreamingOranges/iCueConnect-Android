@@ -117,9 +117,6 @@ public class MainActivity extends AppCompatActivity {
                     });
                     thread.start();
                 }
-                else{
-                    Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT).show();
-                }
             }
         });
 
