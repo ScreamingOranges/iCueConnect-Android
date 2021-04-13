@@ -3,6 +3,7 @@ package com.example.icuepyphone;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -32,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
     private int DefaultColor;
     private String chosenCommand;
     private List<Integer> myList = new ArrayList<Integer>();
+    private ArrayList<String> listData = new ArrayList<>();
+    Pusher pusher;
+    DatabaseHelper mDatabaseHelper;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -60,8 +64,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Pusher pusher = new Pusher("1179962", "3b584ee38d8b91d475cd", "21a33f11e65ee31bf618");
-        pusher.setCluster("mt1");
+        mDatabaseHelper = new DatabaseHelper(this);
+        Cursor data = mDatabaseHelper.getData();
+        if((data != null) && (data.getCount() > 0)){
+            while(data.moveToNext()){
+                listData.add(data.getString(1));
+                listData.add(data.getString(2));
+                listData.add(data.getString(3));
+                listData.add(data.getString(4));
+            }
+        }
+        if(!listData.isEmpty()){
+            pusher = new Pusher(listData.get(0), listData.get(1), listData.get(2));
+            pusher.setCluster(listData.get(3));
+        }
         context = getApplicationContext();
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -81,24 +97,29 @@ public class MainActivity extends AppCompatActivity {
                 chosenCommand = binding.commandsSpinner.getSelectedItem().toString();
                 DefaultColor = color;
                 binding.previewSelectedColor.setBackgroundColor(color);
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            myList.clear();
-                            myList.add(Color.red(color));
-                            myList.add(Color.green(color));
-                            myList.add(Color.blue(color));
-                            if(chosenCommand.equals("LIVE")){
-                                pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
+                if(!listData.isEmpty()) {
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                myList.clear();
+                                myList.add(Color.red(color));
+                                myList.add(Color.green(color));
+                                myList.add(Color.blue(color));
+                                if (chosenCommand.equals("LIVE")) {
+                                    pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
+                                }
+                                System.out.println("Command:" + chosenCommand);
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
-                            System.out.println("Command:"+chosenCommand);
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
-                    }
-                });
-                thread.start();
+                    });
+                    thread.start();
+                }
+                else{
+                    Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -112,56 +133,65 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(context, "ENTER/CHOOSE AN RGB VALUE", Toast.LENGTH_SHORT).show();
                 }
                 else if(!inputRGB.isEmpty()) {
-                    Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                myList.clear();
-                                myList.add(Integer.parseInt(result[0]));
-                                myList.add(Integer.parseInt(result[1]));
-                                myList.add(Integer.parseInt(result[2]));
-                                switch (chosenCommand){
-                                    case "PULSE":
-                                        pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_PULSE", myList));
-                                        break;
-                                    case "SOLID":
-                                        pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
-                                        break;
+                    if(!listData.isEmpty()) {
+                        Thread thread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    myList.clear();
+                                    myList.add(Integer.parseInt(result[0]));
+                                    myList.add(Integer.parseInt(result[1]));
+                                    myList.add(Integer.parseInt(result[2]));
+                                    switch (chosenCommand) {
+                                        case "PULSE":
+                                            pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_PULSE", myList));
+                                            break;
+                                        case "SOLID":
+                                            pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
+                                            break;
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
                             }
-                        }
-                    });
-                    thread.start();
-                    Toast.makeText(context, "Sent To iCue", Toast.LENGTH_SHORT).show();
-
+                        });
+                        thread.start();
+                        Toast.makeText(context, "Sent To iCue", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else{
-                    Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                myList.clear();
-                                myList.add(Color.red(DefaultColor));
-                                myList.add(Color.green(DefaultColor));
-                                myList.add(Color.blue(DefaultColor));
-                                switch (chosenCommand){
-                                    case "PULSE":
-                                        pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_PULSE", myList));
-                                        break;
-                                    case "SOLID":
-                                        pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
-                                        break;
+                    if(!listData.isEmpty()) {
+                        Thread thread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    myList.clear();
+                                    myList.add(Color.red(DefaultColor));
+                                    myList.add(Color.green(DefaultColor));
+                                    myList.add(Color.blue(DefaultColor));
+                                    switch (chosenCommand) {
+                                        case "PULSE":
+                                            pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_PULSE", myList));
+                                            break;
+                                        case "SOLID":
+                                            pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
+                                            break;
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
                             }
-                        }
-                    });
-                    thread.start();
-                    Toast.makeText(context, "Sent To iCue", Toast.LENGTH_SHORT).show();
-                    DefaultColor = 0;
+                        });
+                        thread.start();
+                        Toast.makeText(context, "Sent To iCue", Toast.LENGTH_SHORT).show();
+                        DefaultColor = 0;
+                    }
+                    else{
+                        Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 binding.previewSelectedColor.setBackgroundColor(-5592406);
                 binding.inputRGBVal.setText("");
