@@ -14,13 +14,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ICuePyPhone">
         <activity android:name=".PusherConfigActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity">
-
         </activity>
         <activity android:name=".HelpActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity">
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
