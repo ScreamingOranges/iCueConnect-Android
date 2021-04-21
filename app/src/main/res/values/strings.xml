@@ -14,6 +14,7 @@
     <string name="enter_pusher_credentials">Enter Pusher Credentials</string>
     <string name="refer_to_the_help_page_for_instructions">Refer To The Help Page For Instructions</string>
     <string name="save">Save</string>
+    <string name="reset_control">Reset Control</string>
     <string-array name="commands_spinner">
         <item>PULSE</item>
         <item>SOLID</item>

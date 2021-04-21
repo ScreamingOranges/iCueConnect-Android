@@ -56,6 +56,25 @@ public class MainActivity extends AppCompatActivity {
                 Intent pusher_config_intent = new Intent(this, PusherConfigActivity.class);
                 startActivity(pusher_config_intent);
                 return true;
+            case R.id.reset_Control:
+                if(pusher != null) {
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_RESET", "[0,0,0]"));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    thread.start();
+                    Toast.makeText(context, "Reverting iCue Control", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT).show();
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -109,7 +128,6 @@ public class MainActivity extends AppCompatActivity {
                                 if (chosenCommand.equals("LIVE")) {
                                     pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
                                 }
-                                System.out.println("Command:" + chosenCommand);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
