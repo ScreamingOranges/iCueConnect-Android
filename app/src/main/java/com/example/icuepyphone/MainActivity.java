@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                     thread.start();
-                    Toast.makeText(context, "Reverting iCue Control", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Reverting iCue's Control", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT).show();
