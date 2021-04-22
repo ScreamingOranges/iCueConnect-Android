@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">iCue Connect</string>
+    <string name="service_label">NotificationListener</string>
     <string name="button_UpdateiCUE">Update iCUE</string>
     <string name="testView_instructions">Enter RGB Values Below</string>
     <string name="hint_RGBValInput">Enter RGB Value</string>
@@ -15,6 +16,9 @@
     <string name="refer_to_the_help_page_for_instructions">Refer To The Help Page For Instructions</string>
     <string name="save">Save</string>
     <string name="reset_control">Reset Control</string>
+    <string name="notification_leds">Notification Leds</string>
+    <string name="press_the_allow_button_to_enable_in_settings">Press The Allow Button To Enable In Settings</string>
+    <string name="allow">allow</string>
     <string-array name="commands_spinner">
         <item>PULSE</item>
         <item>SOLID</item>

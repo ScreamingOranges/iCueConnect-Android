@@ -1,30 +1,29 @@
 package com.example.icuepyphone;
 
-import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.icuepyphone.databinding.ActivityMainBinding;
 import com.pusher.rest.Pusher;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import top.defaults.colorpicker.ColorObserver;
-import top.defaults.colorpicker.ColorPickerPopup;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -34,8 +33,12 @@ public class MainActivity extends AppCompatActivity {
     private String chosenCommand;
     private List<Integer> myList = new ArrayList<Integer>();
     private ArrayList<String> listData = new ArrayList<>();
+    private notificationBroadcastReceiver notificationBR;
     Pusher pusher;
     DatabaseHelper mDatabaseHelper;
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,6 +86,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        notificationBR = new notificationBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.example.icuepyphone");
+        registerReceiver(notificationBR, intentFilter);
+
+
         mDatabaseHelper = new DatabaseHelper(this);
         Cursor data = mDatabaseHelper.getData();
         if((data != null) && (data.getCount() > 0)){
@@ -93,20 +102,34 @@ public class MainActivity extends AppCompatActivity {
                 listData.add(data.getString(4));
             }
         }
+
+
         if(!listData.isEmpty()){
             pusher = new Pusher(listData.get(0), listData.get(1), listData.get(2));
             pusher.setCluster(listData.get(3));
         }
+
+
         context = getApplicationContext();
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.commands_spinner, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.commandsSpinner.setAdapter(adapter);
+
+
         DefaultColor = 0;
+
+
         binding.colorPicker.setInitialColor(Color.GREEN);
+
+
+
+
 
 
 
@@ -137,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
 
         binding.buttonUpdateiCUE.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,5 +236,18 @@ public class MainActivity extends AppCompatActivity {
                 binding.inputRGBVal.setText("");
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(notificationBR);
+    }
+
+    public class notificationBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(context, "onReceive" + intent.getAction(), Toast.LENGTH_SHORT).show();
+        }
     }
 }

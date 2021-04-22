@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ public class PusherConfigActivity extends AppCompatActivity {
             binding.inputCluster.setText(listData.get(3));
         }
 
+
         binding.buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,6 +65,14 @@ public class PusherConfigActivity extends AppCompatActivity {
                     String dbInsertToast = dbInsertResult ? "Pusher Credentials Updated." : "Pusher Credentials Update Failed.";
                     Toast.makeText(context, dbInsertToast, Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        binding.ButtonLedNotification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS" ) ;
+                startActivity(intent) ;
             }
         });
     }
