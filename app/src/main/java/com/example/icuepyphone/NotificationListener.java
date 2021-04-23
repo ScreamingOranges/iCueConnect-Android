@@ -28,21 +28,10 @@ public class NotificationListener extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
         String appName = matchNotificationCode(sbn);
-        Toast.makeText(context, "onNotificationPosted" + appName, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent();
         intent.setAction("com.example.icuepyphone");
         intent.putExtra("data", appName);
         sendBroadcast(intent);
     }
 
-
-    @Override
-    public void onNotificationRemoved(StatusBarNotification sbn) {
-        String appName = matchNotificationCode(sbn);
-        Toast.makeText(context, "onNotificationRemoved" + appName, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent();
-        intent.setAction("com.example.icuepyphone");
-        intent.putExtra("data", appName);
-        sendBroadcast(intent);
-    }
 }

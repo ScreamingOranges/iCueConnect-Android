@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         notificationBR = new notificationBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.example.icuepyphone");
-        registerReceiver(notificationBR, intentFilter);
+        this.registerReceiver(notificationBR, intentFilter);
 
 
         mDatabaseHelper = new DatabaseHelper(this);
@@ -240,8 +240,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        this.unregisterReceiver(notificationBR);
         super.onDestroy();
-        unregisterReceiver(notificationBR);
     }
 
     public class notificationBroadcastReceiver extends BroadcastReceiver {

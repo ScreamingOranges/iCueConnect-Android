@@ -71,8 +71,7 @@ public class PusherConfigActivity extends AppCompatActivity {
         binding.ButtonLedNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS" ) ;
-                startActivity(intent) ;
+                startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS" )) ;
             }
         });
     }
