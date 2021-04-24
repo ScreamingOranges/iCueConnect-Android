@@ -1,22 +1,13 @@
 package com.example.icuepyphone;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.widget.Toast;
 
 public class NotificationListener extends NotificationListenerService {
     private Context context;
+    static InterfaceNotificationListener INL;
 
-    /*
-    This function handles notification data
-     */
-    private String matchNotificationCode(StatusBarNotification sbn) {
-        String packageName = sbn.getPackageName();
-        return packageName;
-    }
 
     @Override
     public void onCreate() {
@@ -27,11 +18,11 @@ public class NotificationListener extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
-        String appName = matchNotificationCode(sbn);
-        Intent intent = new Intent();
-        intent.setAction("com.example.icuepyphone");
-        intent.putExtra("data", appName);
-        sendBroadcast(intent);
+        INL.setValue(sbn.getPackageName());
     }
 
+
+    public void setListener(InterfaceNotificationListener INL){
+        NotificationListener.INL = INL;
+    }
 }
