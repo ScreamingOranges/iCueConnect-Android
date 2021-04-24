@@ -2,8 +2,15 @@ package com.example.icuepyphone;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.AdaptiveIconDrawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +20,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.palette.graphics.Palette;
+
 import com.example.icuepyphone.databinding.ActivityMainBinding;
 import com.pusher.rest.Pusher;
 import java.util.ArrayList;
@@ -218,6 +227,51 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
 
     @Override
     public void setValue(String packageName) {
-        Toast.makeText(context, packageName, Toast.LENGTH_SHORT).show();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //Drawable drawable = context.getPackageManager().getApplicationIcon(packageName);
+                    //Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+                    //Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+                    /////////////////////////////////////
+                    Bitmap bitmap = null;
+                    try {
+                        Drawable drawable = context.getPackageManager().getApplicationIcon(packageName);
+                        if (drawable instanceof BitmapDrawable) {
+                            bitmap = ((BitmapDrawable) drawable).getBitmap();
+                        } else if (drawable instanceof AdaptiveIconDrawable) {
+                            Drawable backgroundDr = ((AdaptiveIconDrawable) drawable).getBackground();
+                            Drawable foregroundDr = ((AdaptiveIconDrawable) drawable).getForeground();
+                            Drawable[] drr = new Drawable[2];
+                            drr[0] = backgroundDr;
+                            drr[1] = foregroundDr;
+                            LayerDrawable layerDrawable = new LayerDrawable(drr);
+                            int width = layerDrawable.getIntrinsicWidth();
+                            int height = layerDrawable.getIntrinsicHeight();
+                            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                            Canvas canvas = new Canvas(bitmap);
+                            layerDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                            layerDrawable.draw(canvas);
+                        }
+                    } catch (PackageManager.NameNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    //////////////////////
+                    Palette palette = Palette.from(bitmap).generate();
+                    int appColor = palette.getDominantColor(Color.GREEN);
+                    myList.clear();
+                    myList.add(Color.red(appColor));
+                    myList.add(Color.green(appColor));
+                    myList.add(Color.blue(appColor));
+                    pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_PULSE", myList));
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
     }
 }
