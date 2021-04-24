@@ -1,14 +1,10 @@
 package com.example.icuepyphone;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,10 +18,9 @@ import com.pusher.rest.Pusher;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import top.defaults.colorpicker.ColorObserver;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements InterfaceNotificationListener{
     private ActivityMainBinding binding;
     private String inputRGB;
     private Context context;
@@ -33,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     private String chosenCommand;
     private List<Integer> myList = new ArrayList<Integer>();
     private ArrayList<String> listData = new ArrayList<>();
-    private notificationBroadcastReceiver notificationBR;
     Pusher pusher;
     DatabaseHelper mDatabaseHelper;
 
@@ -86,11 +80,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        notificationBR = new notificationBroadcastReceiver();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("com.example.icuepyphone");
-        this.registerReceiver(notificationBR, intentFilter);
+        context = getApplicationContext();
+        super.onCreate(savedInstanceState);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
+        new NotificationListener().setListener(this) ;
 
         mDatabaseHelper = new DatabaseHelper(this);
         Cursor data = mDatabaseHelper.getData();
@@ -103,35 +99,18 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-
         if(!listData.isEmpty()){
             pusher = new Pusher(listData.get(0), listData.get(1), listData.get(2));
             pusher.setCluster(listData.get(3));
         }
 
-
-        context = getApplicationContext();
-        super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(view);
-
-
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.commands_spinner, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.commandsSpinner.setAdapter(adapter);
 
-
         DefaultColor = 0;
 
-
         binding.colorPicker.setInitialColor(Color.GREEN);
-
-
-
-
-
-
 
         binding.colorPicker.subscribe(new ColorObserver() {
             @Override
@@ -160,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         binding.buttonUpdateiCUE.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,15 +217,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        this.unregisterReceiver(notificationBR);
-        super.onDestroy();
-    }
-
-    public class notificationBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Toast.makeText(context, "onReceive" + intent.getAction(), Toast.LENGTH_SHORT).show();
-        }
+    public void setValue(String packageName) {
+        Toast.makeText(context, packageName, Toast.LENGTH_SHORT).show();
     }
 }
