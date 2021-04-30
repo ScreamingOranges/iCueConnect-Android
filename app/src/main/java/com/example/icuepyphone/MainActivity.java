@@ -231,10 +231,6 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
             @Override
             public void run() {
                 try {
-                    //Drawable drawable = context.getPackageManager().getApplicationIcon(packageName);
-                    //Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-                    //Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-                    /////////////////////////////////////
                     Bitmap bitmap = null;
                     try {
                         Drawable drawable = context.getPackageManager().getApplicationIcon(packageName);
@@ -257,8 +253,6 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
                     } catch (PackageManager.NameNotFoundException e) {
                         e.printStackTrace();
                     }
-
-                    //////////////////////
                     Palette palette = Palette.from(bitmap).generate();
                     int appColor = palette.getDominantColor(Color.GREEN);
                     myList.clear();
