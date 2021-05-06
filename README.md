@@ -1,12 +1,12 @@
 # iCueConnect-Android 
 ## Description
-iCueConnect-Android is an Android app that allows you to control your Corsair iCUE device LEDs with the help of the [iCueConnect-API]()
-**THIS README APPLIES FOR THE iCueConnect-Android APP....**<br>
+iCueConnect-Android is an Android app that allows you to control your Corsair iCUE device LEDs with the help of the [iCueConnect-API]()<br/>
+**THIS README APPLIES FOR THE iCueConnect-Android APP....**<br/>
 **FOR DOCUMENTATION REGARDING iCueConnect-API, CLICK THE PRIOR LINK**
->Note: This is an early development release. Some things may not work perfectly, and you may experience some bugs/glitches. Please feel free to inform me of any issues you are having.
+>Note: This is an early development release. Some things may not work perfectly, and you may experience some bugs/glitches. Please feel free to inform me of any issues you are having via the issues tab.
 
 ## Requirements
-* You will need iCue installed running on your windows machine.
+* You will need iCue installed and running on your windows machine.
 * You will need to download and configure the iCueConnect-API on your windows machine.
 * You will have to have configured all your Corsair devices through iCue.
 * In order for iCueConnect-Android App to communicate with [iCueConnect-API]() and set the LEDs accordingly, both devices must be connected to the internet.
@@ -25,7 +25,7 @@ iCueConnect-Android is an Android app that allows you to control your Corsair iC
 5. Press the back button so that you are on the screen showing the prompt asking **Do you want to install this application**. Two buttons will be displayed, **Cancel** and **Install**. Click **Install**.
 
 ### Setting Up Pusher
-iCueConnect uses Pusher for realtime communication between iCueConnect-Android App and iCueConnect-API using websockets. You do not have to know exactly what Pusher is and how it works. You just need to make an account in order for this iCueConnect to work.
+iCueConnect uses Pusher for realtime communication between iCueConnect-Android App and iCueConnect-API using websockets. You do not have to know exactly what Pusher is and how it works. You just need to make an account in order for this iCueConnect to work. If you have not done so already preform the following to create a Pusher account.
 1. Create a free Pusher account [here](https://dashboard.pusher.com/accounts/sign_up).
 2. When asked to get started between Channels or Breams, choose **CHANNELS**.
 3. When given the following input fields, enter the associated values and then press the "Create app" button.
@@ -41,13 +41,13 @@ iCueConnect uses Pusher for realtime communication between iCueConnect-Android A
 5. Save these values. We will need them later.
 
 ### Configuring iCueConnect on Android 
-1. First make sure that you downloaded and configured the iCueConnect-API. If you do not do this, the app will not work.
-2. Open iCueConnect on Android and click the gear icon in the top right corner.
-3. In the fields enter the associated values that we got from creating a Pusher account.
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+1. First make sure that you downloaded and configured the iCueConnect-API. **If you did not do this, the app will not work**.
+2. Open iCueConnect on Android and click the settings icon <img src="https://icon-library.com/images/white-gear-icon/white-gear-icon-6.jpg" width="20px"> in the top right corner.
+3. In the fields enter the associated values that we got from creating a Pusher account. **DO NOT ENTER THE QUOTATION MARKS, ONLY ENTER THE TEXT**
+4. Click the **SAVE** button to set the values.
+    > Note: If you enter an incorrect value for any of the fields, simply update the values in the fields and click the **SAVE** button again.
+
 ## How To Use
-
-
 1. Revert Control
     * This reverts led control back to iCue. 
     * For example, if you set the Leds to a color from iCueConnect-Android App, then they will stay that color unless you click **Revert Control**.
