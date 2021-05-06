@@ -25,7 +25,10 @@ iCueConnect-Android is an Android app that allows you to control your Corsair iC
 5. Press the back button so that you are on the screen showing the prompt asking **Do you want to install this application**. Two buttons will be displayed, **Cancel** and **Install**. Click **Install**.
 
 ### Setting Up Pusher
-iCueConnect uses Pusher for realtime communication between iCueConnect-Android App and iCueConnect-API using websockets. You do not have to know exactly what Pusher is and how it works. You just need to make an account in order for this iCueConnect to work. If you have not done so already preform the following to create a Pusher account.
+iCueConnect uses Pusher for realtime communication between iCueConnect-Android App and iCueConnect-API using websockets. You do not have to know exactly what Pusher is and how it works. You just need to make an account in order for this iCueConnect to work. If you have not done so already preform the following to create a Pusher account.<br>
+
+<img align="right" style="padding-left:20px" src="./readmeImages/pusher_activity_field.jpg" width="200px">
+
 1. Create a free Pusher account [here](https://dashboard.pusher.com/accounts/sign_up).
 2. When asked to get started between Channels or Breams, choose **CHANNELS**.
 3. When given the following input fields, enter the associated values and then press the "Create app" button.
@@ -42,18 +45,53 @@ iCueConnect uses Pusher for realtime communication between iCueConnect-Android A
 
 ### Configuring iCueConnect on Android 
 1. First make sure that you downloaded and configured the iCueConnect-API. **If you did not do this, the app will not work**.
-2. Open iCueConnect on Android and click the settings icon <img src="https://icon-library.com/images/white-gear-icon/white-gear-icon-6.jpg" width="20px"> in the top right corner.
-3. In the fields enter the associated values that we got from creating a Pusher account. **DO NOT ENTER THE QUOTATION MARKS, ONLY ENTER THE TEXT**
+2. Open iCueConnect on Android and click the settings icon in the top right corner. <img align="right" style="padding-left:20px" src="./readmeImages/pusher_config_icon.jpg" width="200px">
+3. In the fields enter the associated values that we got from creating a Pusher account. <br/> **DO NOT ENTER THE QUOTATION MARKS, ONLY ENTER THE TEXT**
 4. Click the **SAVE** button to set the values.
     > Note: If you enter an incorrect value for any of the fields, simply update the values in the fields and click the **SAVE** button again.
 
 ## How To Use
-1. Revert Control
-    * This reverts led control back to iCue. 
-    * For example, if you set the Leds to a color from iCueConnect-Android App, then they will stay that color unless you click **Revert Control**.
-        > Note: The iCueConnect-Android App also has this same functionality, but it is the <img src="https://www.iconsdb.com/icons/preview/white/refresh-2-xxl.png" width="20px"> icon.
-2. Quit
-    * This closes the application.
+When you first open the app you will be presented with the right most image.<br> 
+This is the main page where you can manually control your LEDs.<br>
+
+<img style="float:right; padding-left:20px" src="./readmeImages/main_activity_default.jpg" width="250px">
+
+### The Menu Bar 
+* The menu bar is the main way to navigate through out the app, and only has three buttons. <br><br>
+<img src="./readmeImages/reset_control_icon.jpg" height="140px"> <img src="./readmeImages/help_icon.jpg" height="140px"> <img src="./readmeImages/pusher_config_icon.jpg" height="140px">
+
+1. **Revert Control** 
+   * This reverts LED control back to iCue. 
+   * For example, if you set the LEDs to a color using the **LIVE** or **SOLID** option, then they will stay that color unless you click this button.
+2. **HELP**  
+   * This button redirects to a page shows the readme files for both the iCueConnect-API and the iCueConnect-Android app.
+3. **Pusher Configuration**
+   * This button redirects to the previously mentioned [Setting Up Pusher](#setting-up-pusher) section.
+
+### Controlling LEDs
+  1. Select an option from the dropdown below the **Enter RGB Values Below** title where the following options will appear.<br/> 
+       * **Pulse** :  Pulses the LEDs and then goes back to iCUE's selected color. 
+       * **SOLID** : Sets the LEDs to color of your choice and stays that color.
+       * **LIVE** : This is works the same way that the SOLID option does, except that the color of your LEDs are automatically set.
+  2. Use the color wheel to select the color of your choice. You can preview the color of your choice via the color square.
+  3. Use the horizontal bar to select the brightness. 
+  4. **(OPTIONAL)** Instead of using the color wheel and the brightness bar, you can enter RGB values in the input field. Each value should be from 0 to 255, and should be separated by a space. For example:
+      * Passing the color RED
+        ```
+        255 0 0
+        ```
+     * Passing the color GREEN
+        ```
+        0 255 0
+        ```
+     * Passing the color BLUE
+        ```
+        0 0 255
+        ```
+   5. If you selected **LIVE** from the dropdown, then you can skip this step since the **UPDATE ICUE** button is pointless. However if you chose another option, then when you are done choosing a color either by the color wheel, or by the RGB Value input field, press the **UPDATE ICUE** button to set your LEDs to your color of choice.
+
+
+################################################################################################################################################################################################################################################################################################################################################################################################################################################################
 
 ## Help
 * Leds not updating according to your phones selection? Follow these trouble shooting steps.
