@@ -54,7 +54,7 @@ iCueConnect uses Pusher for realtime communication between iCueConnect-Android A
 When you first open the app you will be presented with the right most image.<br> 
 This is the main page where you can manually control your LEDs.<br>
 
-<img style="float:right; padding-left:20px" src="./readmeImages/main_activity_default.jpg" width="250px">
+<img align="right" style="padding-left:20px" src="./readmeImages/main_activity_default.jpg" width="250px">
 
 ### The Menu Bar 
 * The menu bar is the main way to navigate through out the app, and only has three buttons. <br><br>
