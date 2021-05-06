@@ -58,7 +58,7 @@ This is the main page where you can manually control your LEDs.<br>
 
 ### The Menu Bar 
 * The menu bar is the main way to navigate through out the app, and only has three buttons. <br><br>
-<img src="./readmeImages/reset_control_icon.jpg" height="140px"> <img src="./readmeImages/help_icon.jpg" height="140px"> <img src="./readmeImages/pusher_config_icon.jpg" height="140px">
+<img src="./readmeImages/reset_control_icon.jpg" height="70px"> <img src="./readmeImages/help_icon.jpg" height="70px"> <img src="./readmeImages/pusher_config_icon.jpg" height="70px">
 
 1. **Revert Control** 
    * This reverts LED control back to iCue. 
