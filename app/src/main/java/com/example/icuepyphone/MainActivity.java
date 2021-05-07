@@ -154,16 +154,16 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
             public void onClick(View v) {
                 chosenCommand = binding.commandsSpinner.getSelectedItem().toString();
                 inputRGB = binding.inputRGBVal.getText().toString();
-                if(!inputRGB.matches("\\d{1,3}\\s+\\d{1,3}\\s+\\d{1,3}")){
-                    binding.inputRGBVal.setText("");
-                    Toast.makeText(context, "Improper Input Format!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 String[] result = inputRGB.split("\\s+");
                 if((inputRGB.isEmpty()) && (DefaultColor == 0) ){
                     Toast.makeText(context, "ENTER/CHOOSE AN RGB VALUE", Toast.LENGTH_SHORT).show();
                 }
                 else if(!inputRGB.isEmpty()) {
+                    if(!inputRGB.matches("\\d{1,3}\\s+\\d{1,3}\\s+\\d{1,3}")){
+                        binding.inputRGBVal.setText("");
+                        Toast.makeText(context, "Improper Input Format!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     if(!listData.isEmpty()) {
                         Thread thread = new Thread(new Runnable() {
                             @Override
