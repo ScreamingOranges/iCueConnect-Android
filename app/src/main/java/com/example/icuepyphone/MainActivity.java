@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
                 Intent help_intent = new Intent(this, HelpActivity.class);
                 startActivity(help_intent);
                 return true;
-            case R.id.pusher_config:
+            case R.id.settings:
                 Intent pusher_config_intent = new Intent(this, PusherConfigActivity.class);
                 startActivity(pusher_config_intent);
                 return true;
