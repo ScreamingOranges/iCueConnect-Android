@@ -45,7 +45,7 @@ iCueConnect uses Pusher for realtime communication between iCueConnect-Android A
 
 ### Configuring iCueConnect on Android 
 1. First make sure that you downloaded and configured the iCueConnect-API. **If you did not do this, the app will not work**.
-2. Open iCueConnect on Android and click the settings icon in the top right corner. <img align="right" style="padding-left:20px" src="./readmeImages/pusher_config_icon.jpg" width="200px">
+2. Open iCueConnect on Android and click the settings icon in the top right corner. <img align="right" style="padding-left:20px" src="./readmeImages/settings_icon.jpg" width="200px">
 3. In the fields enter the associated values that we got from creating a Pusher account. <br/> **DO NOT ENTER THE QUOTATION MARKS, ONLY ENTER THE TEXT**
 4. Click the **SAVE** button to set the values.
     > Note: If you enter an incorrect value for any of the fields, simply update the values in the fields and click the **SAVE** button again.
@@ -58,7 +58,7 @@ This is the main page where you can manually control your LEDs.<br>
 
 ### The Menu Bar 
 * The menu bar is the main way to navigate through out the app, and only has three buttons. <br><br>
-<img src="./readmeImages/reset_control_icon.jpg" height="70px"> <img src="./readmeImages/help_icon.jpg" height="70px"> <img src="./readmeImages/pusher_config_icon.jpg" height="70px">
+<img src="./readmeImages/reset_control_icon.jpg" height="70px"> <img src="./readmeImages/help_icon.jpg" height="70px"> <img src="./readmeImages/settings_icon.jpg" height="70px">
 
 1. **Revert Control** 
    * This reverts LED control back to iCue. 
