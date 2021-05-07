@@ -114,11 +114,14 @@ This option can be enabled from the **Notification Leds** option in the android 
 # For Developers
 
 ## Utilized Dependencies 
-* [cuesdk: 0.6.6](https://github.com/CorsairOfficial/cue-sdk-python)
-* [PyQt5: 5.15.2](https://www.qt.io/)
-* [websocket-client: 0.48.0](https://github.com/websocket-client/websocket-client)
-* [Pysher: 1.0.3](https://github.com/deepbrook/Pysher)
-* [six: 1.15.0](https://github.com/benjaminp/six)
-* [PyInstaller: 5.0.dev0](http://www.pyinstaller.org/)
-    * This is what I used to develop the .exe file.
->Note: There is a bug with the Pysher library that is caused due to changes in the websocket-client library. To get around this I strictly had to use the listed version for websocket-client, Pysher and six.
+* androidx.appcompat:appcompat:1.2.0
+* com.google.android.material:material:1.3.0
+* androidx.constraintlayout:constraintlayout:2.0.4
+* junit:junit:4.+
+* androidx.test.ext:junit:1.1.2
+* androidx.test.espresso:espresso-core:3.3.0
+* com.pusher:pusher-http-java:1.2.0
+* androidx.localbroadcastmanager:localbroadcastmanager:1.0.0
+* com.google.code.gson:gson:2.8.6
+* com.github.duanhong169:colorpicker:1.1.6
+* androidx.palette:palette:1.0.0
