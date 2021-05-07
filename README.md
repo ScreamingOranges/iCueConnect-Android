@@ -104,8 +104,9 @@ This option can be enabled from the **Notification Leds** option in the android 
 * Leds are extremely delayed?
     * Leds on occasion can become delayed, however if there is a continues long delay then try setting iCueConnect's priority to realtime or high. Don't know how to do this? Check this [tutorial](https://winaero.com/change-process-priority-windows-10/) out then!
         > Note: iCueConnect will appear in the Details tab twice in the Task Manager. Set both accordingly. 
-* Are notification LEDs not working?
+* Are notification LEDs not working properly?
   * Make sure you allowed the option **Notification Leds** in the android app's settings page.
+  * If the setting is enabled, then you will need to make sure that battery optimization is disabled for the android app.
 
 ## Version History
 * 1.0
