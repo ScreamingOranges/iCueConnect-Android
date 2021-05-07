@@ -25,7 +25,7 @@ iCueConnect-Android is an Android app that allows you to control your Corsair iC
 5. Press the back button so that you are on the screen showing the prompt asking **Do you want to install this application**. Two buttons will be displayed, **Cancel** and **Install**. Click **Install**.
 
 ### Setting Up Pusher
-iCueConnect uses Pusher for realtime communication between iCueConnect-Android App and iCueConnect-API using websockets. You do not have to know exactly what Pusher is and how it works. You just need to make an account in order for this iCueConnect to work. If you have not done so already preform the following to create a Pusher account.<br>
+iCueConnect uses Pusher for realtime communication between iCueConnect-Android App and iCueConnect-API using sockets. You do not have to know exactly what Pusher is and how it works. You just need to make an account in order for this iCueConnect to work. If you have not done so already preform the following to create a Pusher account.<br>
 
 <img align="right" style="padding-left:20px" src="./readmeImages/pusher_activity_field.jpg" width="200px">
 
@@ -63,9 +63,9 @@ This is the main page where you can manually control your LEDs.<br>
 1. **Revert Control** 
    * This reverts LED control back to iCue. 
    * For example, if you set the LEDs to a color using the **LIVE** or **SOLID** option, then they will stay that color unless you click this button.
-2. **HELP**  
+2. **Help**  
    * This button redirects to a page shows the readme files for both the iCueConnect-API and the iCueConnect-Android app.
-3. **Pusher Configuration**
+3. **Settings**
    * This button redirects to the previously mentioned [Setting Up Pusher](#setting-up-pusher) section.
 
 ### Controlling LEDs
@@ -90,8 +90,9 @@ This is the main page where you can manually control your LEDs.<br>
         ```
    5. If you selected **LIVE** from the dropdown, then you can skip this step since the **UPDATE ICUE** button is pointless. However if you chose another option, then when you are done choosing a color either by the color wheel, or by the RGB Value input field, press the **UPDATE ICUE** button to set your LEDs to your color of choice.
 
+### Notification LEDs
+This option can be enabled from the **Notification Leds** option in the android app's settings page.
 
-################################################################################################################################################################################################################################################################################################################################################################################################################################################################
 
 ## Help
 * Leds not updating according to your phones selection? Follow these trouble shooting steps.
@@ -103,17 +104,16 @@ This is the main page where you can manually control your LEDs.<br>
 * Leds are extremely delayed?
     * Leds on occasion can become delayed, however if there is a continues long delay then try setting iCueConnect's priority to realtime or high. Don't know how to do this? Check this [tutorial](https://winaero.com/change-process-priority-windows-10/) out then!
         > Note: iCueConnect will appear in the Details tab twice in the Task Manager. Set both accordingly. 
+* Are notification LEDs not working?
+  * Make sure you allowed the option **Notification Leds** in the android app's settings page.
 
 ## Version History
 * 1.0
     * Initial Release
 
 # For Developers
-## Language of Choice
-iCueConnect is a Python based application that utilizes the following:
-* Python 3.8.5
 
-## Utilized Libraries 
+## Utilized Dependencies 
 * [cuesdk: 0.6.6](https://github.com/CorsairOfficial/cue-sdk-python)
 * [PyQt5: 5.15.2](https://www.qt.io/)
 * [websocket-client: 0.48.0](https://github.com/websocket-client/websocket-client)
