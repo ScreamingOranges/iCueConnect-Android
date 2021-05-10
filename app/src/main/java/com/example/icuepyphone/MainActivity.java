@@ -11,6 +11,7 @@ import android.graphics.drawable.AdaptiveIconDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,8 +56,8 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         context = getApplicationContext();
         switch (item.getItemId()) {
             case R.id.help:
-                Intent help_intent = new Intent(this, HelpActivity.class);
-                startActivity(help_intent);
+                Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://github.com/ScreamingOranges/iCueConnect-Android/blob/master/README.md"));
+                startActivity(intent);
                 return true;
             case R.id.settings:
                 Intent pusher_config_intent = new Intent(this, PusherConfigActivity.class);

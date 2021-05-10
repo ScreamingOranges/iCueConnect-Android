@@ -21,10 +21,6 @@
             android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity">
         </activity>
-        <activity android:name=".HelpActivity"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".MainActivity">
-        </activity>
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
