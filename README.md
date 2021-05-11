@@ -64,7 +64,7 @@ This is the main page where you can manually control your LEDs.<br>
    * This reverts LED control back to iCue. 
    * For example, if you set the LEDs to a color using the **LIVE** or **SOLID** option, then they will stay that color unless you click this button.
 2. **Help**  
-   * This button redirects to a page shows the readme files for both the iCueConnect-API and the iCueConnect-Android app.
+   * This button redirects to a page shows the readme file for the iCueConnect-Android app.
 3. **Settings**
    * This button redirects to the previously mentioned [Setting Up Pusher](#setting-up-pusher) section.
 
