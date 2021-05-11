@@ -9,12 +9,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.icuepyphone.databinding.ActivityPusherConfigBinding;
+import com.example.icuepyphone.databinding.ActivitySettingsBinding;
 
 import java.util.ArrayList;
 
 public class Settings extends AppCompatActivity {
-    private ActivityPusherConfigBinding binding;
+    private ActivitySettingsBinding binding;
     private Context context;
     private String app_id;
     private String key;
@@ -25,7 +25,7 @@ public class Settings extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityPusherConfigBinding.inflate(getLayoutInflater());
+        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
         context = getApplicationContext();
