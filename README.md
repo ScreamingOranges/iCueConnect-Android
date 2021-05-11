@@ -1,6 +1,6 @@
 # iCueConnect-Android 
 ## Description
-iCueConnect-Android is an Android app that allows you to control your Corsair iCUE device LEDs with the help of the [iCueConnect-API]()<br/>
+iCueConnect-Android is an Android app that allows you to control your Corsair iCUE device LEDs with the help of the [iCueConnect-API](https://github.com/ScreamingOranges/iCueConnect-API)<br/>
 **THIS README APPLIES FOR THE iCueConnect-Android APP....**<br/>
 **FOR DOCUMENTATION REGARDING iCueConnect-API, CLICK THE PRIOR LINK**
 >Note: This is an early development release. Some things may not work perfectly, and you may experience some bugs/glitches. Please feel free to inform me of any issues you are having via the issues tab.
@@ -9,7 +9,7 @@ iCueConnect-Android is an Android app that allows you to control your Corsair iC
 * You will need iCue installed and running on your windows machine.
 * You will need to download and configure the iCueConnect-API on your windows machine.
 * You will have to have configured all your Corsair devices through iCue.
-* In order for iCueConnect-Android App to communicate with [iCueConnect-API]() and set the LEDs accordingly, both devices must be connected to the internet.
+* In order for iCueConnect-Android App to communicate with [iCueConnect-API](https://github.com/ScreamingOranges/iCueConnect-API) and set the LEDs accordingly, both devices must be connected to the internet.
 * Lastly you will have to check the **Enable SDK** option in iCue's Settings.
 <p align="center">
   <img src="https://help.corsair.com/hc/article_attachments/360072361252/iCUE_SDK_enabled.jpg" width="800px">
@@ -18,7 +18,7 @@ iCueConnect-Android is an Android app that allows you to control your Corsair iC
 ## Installation Instructions & Configuration
 
 ### Downloading  
-1. Download the iCueConnect-Android App [here](). 
+1. Download the iCueConnect-Android App [here](https://github.com/ScreamingOranges/iCueConnect-Android/releases). 
 2. You will be receive a notification asking what to open the file with. Select **Package installer**.
 3. You may receive a security warning stating that your phone is not allowed to install unknown apps from this source. Two buttons will be displayed, **Cancel** and **Settings**. Click **Settings**.
 4. Toggle the option labeled **Allow from this source** so that it is ON.
