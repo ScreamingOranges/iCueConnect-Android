@@ -1,6 +1,7 @@
 # iCueConnect-Android 
 ## Description
 iCueConnect-Android is an Android app that allows you to control your Corsair iCUE device LEDs with the help of the [iCueConnect-API](https://github.com/ScreamingOranges/iCueConnect-API)<br/>
+[Video Example In Use](https://imgur.com/a/CzNtWbY)<br/>
 **THIS README APPLIES FOR THE iCueConnect-Android APP....**<br/>
 **FOR DOCUMENTATION REGARDING iCueConnect-API, CLICK THE PRIOR LINK**
 >Note: This is an early development release. Some things may not work perfectly, and you may experience some bugs/glitches. Please feel free to inform me of any issues you are having via the issues tab.
