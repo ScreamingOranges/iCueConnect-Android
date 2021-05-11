@@ -17,7 +17,7 @@
         android:sharedUserId="android.uid.system"
         android:supportsRtl="true"
         android:theme="@style/Theme.ICuePyPhone">
-        <activity android:name=".PusherConfigActivity"
+        <activity android:name=".Settings"
             android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity">
         </activity>

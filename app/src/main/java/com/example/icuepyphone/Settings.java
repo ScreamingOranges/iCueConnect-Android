@@ -13,7 +13,7 @@ import com.example.icuepyphone.databinding.ActivityPusherConfigBinding;
 
 import java.util.ArrayList;
 
-public class PusherConfigActivity extends AppCompatActivity {
+public class Settings extends AppCompatActivity {
     private ActivityPusherConfigBinding binding;
     private Context context;
     private String app_id;

@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
                 startActivity(intent);
                 return true;
             case R.id.settings:
-                Intent pusher_config_intent = new Intent(this, PusherConfigActivity.class);
+                Intent pusher_config_intent = new Intent(this, Settings.class);
                 startActivity(pusher_config_intent);
                 return true;
             case R.id.reset_Control:
