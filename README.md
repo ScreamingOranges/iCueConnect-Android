@@ -108,6 +108,9 @@ This option can be enabled from the **Notification Leds** option in the android 
   * Make sure you allowed the option **Notification Leds** in the android app's settings page.
   * If the setting is enabled, then you will need to make sure that battery optimization is disabled for the android app.
 
+## Disclaimer 
+**I do work for nor did I partner up with Corsair to produce this application. I am simply an enthusiast who just wanted to bring an idea to life.**
+
 ## Version History
 * 1.0
     * Initial Release
