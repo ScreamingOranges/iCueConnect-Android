@@ -40,7 +40,6 @@ public class Settings extends AppCompatActivity {
                 listData.add(data.getString(3));
                 listData.add(data.getString(4));
             }
-            listData.forEach(System.out::println);
             binding.inputAppId.setText(listData.get(0));
             binding.inputKey.setText(listData.get(1));
             binding.inputSecret.setText(listData.get(2));
