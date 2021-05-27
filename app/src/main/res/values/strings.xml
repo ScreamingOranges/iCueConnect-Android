@@ -24,5 +24,14 @@
         <item>SOLID</item>
         <item>LIVE</item>
     </string-array>
-
+    <string-array name="cluster_spinner">
+        <item>mt1</item>
+        <item>us2</item>
+        <item>us3</item>
+        <item>eu</item>
+        <item>ap1</item>
+        <item>ap2</item>
+        <item>ap3</item>
+        <item>ap4</item>
+    </string-array>
 </resources>

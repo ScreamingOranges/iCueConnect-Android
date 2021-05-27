@@ -110,7 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
-        android:labelFor="@id/inputCluster"
+        android:labelFor="@id/cluster_spinner"
         android:text="@string/cluster"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/secret"
@@ -144,19 +144,6 @@
         app:layout_constraintTop_toBottomOf="@+id/inputAppId" />
 
     <EditText
-        android:id="@+id/inputCluster"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:ems="10"
-        android:importantForAutofill="no"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.81"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputSecret" />
-
-    <EditText
         android:id="@+id/inputSecret"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -180,5 +167,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.591" />
+
+    <Spinner
+        android:id="@+id/cluster_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.625"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputSecret" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
