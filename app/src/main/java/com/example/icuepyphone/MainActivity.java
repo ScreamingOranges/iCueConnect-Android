@@ -126,6 +126,17 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
                 }
             });
             thread.start();
+            thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("Request_SubDevices", ""));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
         }
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.commands_spinner, android.R.layout.simple_spinner_item);
@@ -243,27 +254,6 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
                 binding.inputRGBVal.setText("");
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(!listData.isEmpty()) {
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("Request_SubDevices", ""));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            thread.start();
-        }
-        else{
-            Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
