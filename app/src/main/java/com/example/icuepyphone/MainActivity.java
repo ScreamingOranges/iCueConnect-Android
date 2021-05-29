@@ -178,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         binding.buttonUpdateiCUE.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chosenCommand = binding.commandsSpinner.getSelectedItem().toString();
                 inputRGB = binding.inputRGBVal.getText().toString();
                 String[] result = inputRGB.split("\\s+");
                 if((inputRGB.isEmpty()) && (DefaultColor == 0) ){
@@ -199,14 +198,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
                                     myList.add(Integer.parseInt(result[0]));
                                     myList.add(Integer.parseInt(result[1]));
                                     myList.add(Integer.parseInt(result[2]));
-                                    switch (chosenCommand) {
-                                        case "PULSE":
-                                            pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_PULSE", myList));
-                                            break;
-                                        case "SOLID":
-                                            pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
-                                            break;
-                                    }
+                                    pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -229,14 +221,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
                                     myList.add(Color.red(DefaultColor));
                                     myList.add(Color.green(DefaultColor));
                                     myList.add(Color.blue(DefaultColor));
-                                    switch (chosenCommand) {
-                                        case "PULSE":
-                                            pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_PULSE", myList));
-                                            break;
-                                        case "SOLID":
-                                            pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
-                                            break;
-                                    }
+                                    pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }

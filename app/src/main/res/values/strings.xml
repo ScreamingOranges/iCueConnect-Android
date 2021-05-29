@@ -20,7 +20,6 @@
     <string name="press_the_allow_button_to_enable_in_settings">Press The Allow Button To Enable In Settings</string>
     <string name="allow">allow</string>
     <string-array name="commands_spinner">
-        <item>PULSE</item>
         <item>SOLID</item>
         <item>LIVE</item>
     </string-array>
