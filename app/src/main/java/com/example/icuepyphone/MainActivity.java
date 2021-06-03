@@ -43,8 +43,6 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
     DatabaseHelper mDatabaseHelper;
 
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
