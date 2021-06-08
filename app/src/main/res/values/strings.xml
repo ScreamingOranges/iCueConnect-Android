@@ -19,9 +19,9 @@
     <string name="notification_leds">Notification Leds</string>
     <string name="press_the_allow_button_to_enable_in_settings">Press The Allow Button To Enable In Settings</string>
     <string name="allow">allow</string>
+    <string name="switchLive">LIVE</string>
     <string-array name="commands_spinner">
-        <item>SOLID</item>
-        <item>LIVE</item>
+        <item>ALL</item>
     </string-array>
     <string-array name="cluster_spinner">
         <item>mt1</item>

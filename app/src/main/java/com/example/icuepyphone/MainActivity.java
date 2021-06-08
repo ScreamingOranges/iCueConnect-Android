@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
     private String inputRGB;
     private Context context;
     private int DefaultColor;
-    private String chosenCommand;
+    private Boolean isLive = false;
     private PusherHelper pusherHelper;
 
 
@@ -78,22 +79,29 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         DefaultColor = 0;
         new NotificationListener().setListener(this) ;
         pusherHelper = new PusherHelper(context);
+        binding.colorPicker.setInitialColor(Color.GREEN);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.commands_spinner, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.commandsSpinner.setAdapter(adapter);
-        binding.colorPicker.setInitialColor(Color.GREEN);
 
 
 
+
+
+        binding.switchLive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                isLive = !isLive;
+            }
+        });
 
         binding.colorPicker.subscribe(new ColorObserver() {
             @Override
             public void onColor(int color, boolean fromUser, boolean shouldPropagate) {
-                chosenCommand = binding.commandsSpinner.getSelectedItem().toString();
                 DefaultColor = color;
                 binding.previewSelectedColor.setBackgroundColor(color);
-                if ("LIVE".equals(chosenCommand)){
+                if (isLive){
                     pusherHelper.trigger(context, Color.red(color), Color.green(color), Color.blue(color));
                 }
             }
@@ -102,7 +110,6 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         binding.buttonUpdateiCUE.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chosenCommand = binding.commandsSpinner.getSelectedItem().toString();
                 inputRGB = binding.inputRGBVal.getText().toString();
                 String[] result = inputRGB.split("\\s+");
                 if((inputRGB.isEmpty()) && (DefaultColor == 0) ){
