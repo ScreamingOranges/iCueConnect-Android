@@ -36,11 +36,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
     private Context context;
     private int DefaultColor;
     private String chosenCommand;
-    private List<Integer> myList = new ArrayList<Integer>();
-    private ArrayList<String> listData = new ArrayList<>();
-    Pusher pusher;
-    PusherClient pusherClient;
-    DatabaseHelper mDatabaseHelper;
+    private PusherHelper pusherHelper;
 
 
     @Override
@@ -59,27 +55,11 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
                 startActivity(intent);
                 return true;
             case R.id.settings:
-                Intent pusher_config_intent = new Intent(this, Settings.class);
-                startActivity(pusher_config_intent);
+                Intent settings = new Intent(this, Settings.class);
+                startActivity(settings);
                 return true;
             case R.id.reset_Control:
-                if(pusher != null) {
-                    Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_RESET", "[0,0,0]"));
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                    thread.start();
-                    Toast.makeText(context, "Reverting iCue's Control", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT).show();
-                }
+                pusherHelper.resetControl(context);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -95,55 +75,17 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         View view = binding.getRoot();
         setContentView(view);
 
+        DefaultColor = 0;
         new NotificationListener().setListener(this) ;
-
-        mDatabaseHelper = new DatabaseHelper(this);
-        Cursor data = mDatabaseHelper.getData();
-        if((data != null) && (data.getCount() > 0)){
-            while(data.moveToNext()){
-                listData.add(data.getString(1));
-                listData.add(data.getString(2));
-                listData.add(data.getString(3));
-                listData.add(data.getString(4));
-            }
-        }
-
-        if(!listData.isEmpty()){
-            pusher = new Pusher(listData.get(0), listData.get(1), listData.get(2));
-            pusher.setCluster(listData.get(3));
-
-            pusherClient = new PusherClient(listData);
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run(){
-                    try {
-                        pusherClient.connectionListener();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            thread.start();
-            thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("Request_SubDevices", ""));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            thread.start();
-        }
+        pusherHelper = new PusherHelper(context);
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.commands_spinner, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.commandsSpinner.setAdapter(adapter);
-
-        DefaultColor = 0;
-
         binding.colorPicker.setInitialColor(Color.GREEN);
+
+
+
 
         binding.colorPicker.subscribe(new ColorObserver() {
             @Override
@@ -151,24 +93,8 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
                 chosenCommand = binding.commandsSpinner.getSelectedItem().toString();
                 DefaultColor = color;
                 binding.previewSelectedColor.setBackgroundColor(color);
-                if(!listData.isEmpty()) {
-                    Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                myList.clear();
-                                myList.add(Color.red(color));
-                                myList.add(Color.green(color));
-                                myList.add(Color.blue(color));
-                                if (chosenCommand.equals("LIVE")) {
-                                    pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                    thread.start();
+                if ("LIVE".equals(chosenCommand)){
+                    pusherHelper.trigger(context, Color.red(color), Color.green(color), Color.blue(color));
                 }
             }
         });
@@ -176,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         binding.buttonUpdateiCUE.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                chosenCommand = binding.commandsSpinner.getSelectedItem().toString();
                 inputRGB = binding.inputRGBVal.getText().toString();
                 String[] result = inputRGB.split("\\s+");
                 if((inputRGB.isEmpty()) && (DefaultColor == 0) ){
@@ -187,51 +114,11 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
                         Toast.makeText(context, "Improper Input Format!", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if(!listData.isEmpty()) {
-                        Thread thread = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    myList.clear();
-                                    myList.add(Integer.parseInt(result[0]));
-                                    myList.add(Integer.parseInt(result[1]));
-                                    myList.add(Integer.parseInt(result[2]));
-                                    pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                        thread.start();
-                        Toast.makeText(context, "Sent To iCue", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
-                        Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT).show();
-                    }
+                    pusherHelper.trigger(context, Integer.parseInt(result[0]), Integer.parseInt(result[1]), Integer.parseInt(result[2]));
                 }
                 else{
-                    if(!listData.isEmpty()) {
-                        Thread thread = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    myList.clear();
-                                    myList.add(Color.red(DefaultColor));
-                                    myList.add(Color.green(DefaultColor));
-                                    myList.add(Color.blue(DefaultColor));
-                                    pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", myList));
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                        thread.start();
-                        Toast.makeText(context, "Sent To iCue", Toast.LENGTH_SHORT).show();
-                        DefaultColor = 0;
-                    }
-                    else{
-                        Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT).show();
-                    }
+                    pusherHelper.trigger(context, Color.red(DefaultColor), Color.green(DefaultColor), Color.blue(DefaultColor));
+                    DefaultColor = 0;
                 }
                 binding.previewSelectedColor.setBackgroundColor(-5592406);
                 binding.inputRGBVal.setText("");
@@ -241,45 +128,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
 
     @Override
     public void setValue(String packageName) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Bitmap bitmap = null;
-                    try {
-                        Drawable drawable = context.getPackageManager().getApplicationIcon(packageName);
-                        if (drawable instanceof BitmapDrawable) {
-                            bitmap = ((BitmapDrawable) drawable).getBitmap();
-                        } else if (drawable instanceof AdaptiveIconDrawable) {
-                            Drawable backgroundDr = ((AdaptiveIconDrawable) drawable).getBackground();
-                            Drawable foregroundDr = ((AdaptiveIconDrawable) drawable).getForeground();
-                            Drawable[] drr = new Drawable[2];
-                            drr[0] = backgroundDr;
-                            drr[1] = foregroundDr;
-                            LayerDrawable layerDrawable = new LayerDrawable(drr);
-                            int width = layerDrawable.getIntrinsicWidth();
-                            int height = layerDrawable.getIntrinsicHeight();
-                            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-                            Canvas canvas = new Canvas(bitmap);
-                            layerDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-                            layerDrawable.draw(canvas);
-                        }
-                    } catch (PackageManager.NameNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    Palette palette = Palette.from(bitmap).generate();
-                    int appColor = palette.getDominantColor(Color.GREEN);
-                    myList.clear();
-                    myList.add(Color.red(appColor));
-                    myList.add(Color.green(appColor));
-                    myList.add(Color.blue(appColor));
-                    pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_PULSE", myList));
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        thread.start();
+        pusherHelper.setLedNotification(context, packageName);
     }
+
 }
