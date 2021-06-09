@@ -59,4 +59,5 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.github.duanhong169:colorpicker:1.1.6'
     implementation 'androidx.palette:palette:1.0.0'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.3'
 }
