@@ -11,11 +11,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.widget.Toast;
-
 import androidx.palette.graphics.Palette;
-
 import com.pusher.rest.Pusher;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,7 +47,6 @@ public class PusherHelper {
                 @Override
                 public void run(){
                     try {
-                        pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("Request_SubDevices", ""));
                         pusherClient.connectionListener();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -59,6 +55,33 @@ public class PusherHelper {
             });
             thread.start();
         }
+    }
+
+    public void requestDevices(Context context){
+        if(!pusherCredentials.isEmpty()) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("Request_SubDevices", ""));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
+            if (null != msg) {
+                msg.cancel();
+            }
+            msg = Toast.makeText(context, "Requesting Devices From API", Toast.LENGTH_SHORT);
+        }
+        else {
+            if(null != msg){
+                msg.cancel();
+            }
+            msg = Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT);
+        }
+        msg.show();
     }
 
     public void trigger(Context context, int r, int g, int b){
@@ -105,15 +128,14 @@ public class PusherHelper {
                 msg.cancel();
             }
             msg = Toast.makeText(context, "Reverting iCue's Control", Toast.LENGTH_SHORT);
-            msg.show();
         }
         else{
             if(null != msg){
                 msg.cancel();
             }
             msg = Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT);
-            msg.show();
         }
+        msg.show();
     }
 
     public void setLedNotification(Context context, String packageName){
