@@ -37,17 +37,17 @@ public class Settings extends AppCompatActivity {
 
         Cursor data = mDatabaseHelper.getData();
         if((data != null) && (data.getCount() > 0)){
-            ArrayList<String> listData = new ArrayList<>();
+            ArrayList<String> pusherCredentials = new ArrayList<>();
             while(data.moveToNext()){
-                listData.add(data.getString(1));
-                listData.add(data.getString(2));
-                listData.add(data.getString(3));
-                listData.add(data.getString(4));
+                pusherCredentials.add(data.getString(1));
+                pusherCredentials.add(data.getString(2));
+                pusherCredentials.add(data.getString(3));
+                pusherCredentials.add(data.getString(4));
             }
-            binding.inputAppId.setText(listData.get(0));
-            binding.inputKey.setText(listData.get(1));
-            binding.inputSecret.setText(listData.get(2));
-            binding.clusterSpinner.setSelection(adapter.getPosition(listData.get(3)));
+            binding.inputAppId.setText(pusherCredentials.get(0));
+            binding.inputKey.setText(pusherCredentials.get(1));
+            binding.inputSecret.setText(pusherCredentials.get(2));
+            binding.clusterSpinner.setSelection(adapter.getPosition(pusherCredentials.get(3)));
         }
 
 
