@@ -9,9 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
-
 import com.example.icuepyphone.databinding.ActivitySettingsBinding;
-
 import java.util.ArrayList;
 
 public class Settings extends AppCompatActivity {

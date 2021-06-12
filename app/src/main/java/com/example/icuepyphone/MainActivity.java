@@ -2,41 +2,24 @@ package com.example.icuepyphone;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.AdaptiveIconDrawable;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.palette.graphics.Palette;
-
 import com.example.icuepyphone.databinding.ActivityMainBinding;
-import com.pusher.rest.Pusher;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-
 import top.defaults.colorpicker.ColorObserver;
 
 public class MainActivity extends AppCompatActivity implements InterfaceNotificationListener{
     private ActivityMainBinding binding;
     private Map<String,String> devices;
-    private ArrayAdapter<CharSequence> adapter;
     private String inputRGB;
     private Context context;
     private int DefaultColor;
@@ -57,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         switch (item.getItemId()) {
             case R.id.sync_devices:
                 devices = pusherHelper.requestDevices(context);
-                System.out.println(devices.entrySet());
+                Utility.assignSpinner(devices, context, binding);
                 return true;
             case R.id.reset_Control:
                 pusherHelper.resetControl(context);
@@ -78,8 +61,8 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        context = getApplicationContext();
         super.onCreate(savedInstanceState);
+        context = getApplicationContext();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
@@ -87,15 +70,11 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         DefaultColor = 0;
         new NotificationListener().setListener(this) ;
         pusherHelper = new PusherHelper(context);
+        //devices = pusherHelper.requestDevices(context);
+
+        Utility.assignSpinner(devices, context, binding);
+
         binding.colorPicker.setInitialColor(Color.GREEN);
-
-        adapter = ArrayAdapter.createFromResource(this, R.array.commands_spinner, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        binding.commandsSpinner.setAdapter(adapter);
-
-
-
-
 
         binding.switchLive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
