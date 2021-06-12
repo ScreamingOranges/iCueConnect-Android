@@ -8,6 +8,11 @@
         android:title="@string/reset_control"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/sync_devices"
+        android:icon="@drawable/ic_baseline_autorenew_24"
+        android:title="@string/sync_devices"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/help"
         android:icon="@drawable/ic_baseline_help_outline_24"
         android:title="@string/help"

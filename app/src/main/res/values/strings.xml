@@ -20,6 +20,7 @@
     <string name="press_the_allow_button_to_enable_in_settings">Press The Allow Button To Enable In Settings</string>
     <string name="allow">allow</string>
     <string name="switchLive">LIVE</string>
+    <string name="sync_devices">Sync Devices</string>
     <string-array name="commands_spinner">
         <item>ALL</item>
     </string-array>

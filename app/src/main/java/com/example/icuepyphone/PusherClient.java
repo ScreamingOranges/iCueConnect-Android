@@ -30,7 +30,7 @@ public class PusherClient {
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
             devices =  mapper.readValue(event.getData(), HashMap.class);
-            System.out.println(devices.entrySet());
+            //System.out.println(devices.entrySet());
             //System.out.println(devices.get("0"));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -58,7 +58,7 @@ public class PusherClient {
 
             @Override
             public void onEvent(PusherEvent event) {
-                System.out.println(String.format("Received event [%s]", event.toString()));
+                //System.out.println(String.format("Received event [%s]", event.toString()));
                 eventHandler(event);
             }
         };

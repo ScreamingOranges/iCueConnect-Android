@@ -16,6 +16,7 @@ import com.pusher.rest.Pusher;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class PusherHelper {
     private Toast msg;
@@ -57,7 +58,7 @@ public class PusherHelper {
         }
     }
 
-    public void requestDevices(Context context){
+    public Map<String,String> requestDevices(Context context){
         if(!pusherCredentials.isEmpty()) {
             Thread thread = new Thread(new Runnable() {
                 @Override
@@ -70,18 +71,20 @@ public class PusherHelper {
                 }
             });
             thread.start();
-            if (null != msg) {
-                msg.cancel();
-            }
+            try { thread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
+            if (null != msg) { msg.cancel(); }
             msg = Toast.makeText(context, "Requesting Devices From API", Toast.LENGTH_SHORT);
         }
         else {
-            if(null != msg){
-                msg.cancel();
-            }
+            if(null != msg){ msg.cancel(); }
             msg = Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT);
         }
         msg.show();
+        while (pusherClient.devices == null) {
+            try { Thread.sleep(100); }
+            catch (final InterruptedException e) { e.printStackTrace(); }
+        }
+        return pusherClient.devices;
     }
 
     public void trigger(Context context, int r, int g, int b){

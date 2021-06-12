@@ -29,10 +29,14 @@ import com.pusher.rest.Pusher;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+
 import top.defaults.colorpicker.ColorObserver;
 
 public class MainActivity extends AppCompatActivity implements InterfaceNotificationListener{
     private ActivityMainBinding binding;
+    private Map<String,String> devices;
+    private ArrayAdapter<CharSequence> adapter;
     private String inputRGB;
     private Context context;
     private int DefaultColor;
@@ -51,6 +55,13 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         context = getApplicationContext();
         switch (item.getItemId()) {
+            case R.id.sync_devices:
+                devices = pusherHelper.requestDevices(context);
+                System.out.println(devices.entrySet());
+                return true;
+            case R.id.reset_Control:
+                pusherHelper.resetControl(context);
+                return true;
             case R.id.help:
                 Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://github.com/ScreamingOranges/iCueConnect-Android/blob/master/README.md"));
                 startActivity(intent);
@@ -58,9 +69,6 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
             case R.id.settings:
                 Intent settings = new Intent(this, Settings.class);
                 startActivity(settings);
-                return true;
-            case R.id.reset_Control:
-                pusherHelper.resetControl(context);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -81,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         pusherHelper = new PusherHelper(context);
         binding.colorPicker.setInitialColor(Color.GREEN);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.commands_spinner, android.R.layout.simple_spinner_item);
+        adapter = ArrayAdapter.createFromResource(this, R.array.commands_spinner, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.commandsSpinner.setAdapter(adapter);
 
