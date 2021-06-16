@@ -19,8 +19,7 @@ public class Utility {
                 deviceList.add(entry.getValue());
             }
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, deviceList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.simple_spinner_item, deviceList);
         binding.commandsSpinner.setAdapter(adapter);
     }
 }
