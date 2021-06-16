@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
     private String inputRGB;
     private Context context;
     private int DefaultColor;
+    private int DeviceIndex;
     private Boolean isLive = false;
     private PusherHelper pusherHelper;
 
@@ -76,6 +78,18 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
 
         binding.colorPicker.setInitialColor(Color.GREEN);
 
+        binding.commandsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                DeviceIndex = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         binding.switchLive.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -89,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
                 DefaultColor = color;
                 binding.previewSelectedColor.setBackgroundColor(color);
                 if (isLive){
-                    pusherHelper.trigger(context, Color.red(color), Color.green(color), Color.blue(color));
+                    pusherHelper.trigger(context, DeviceIndex, Color.red(color), Color.green(color), Color.blue(color));
                 }
             }
         });
@@ -108,10 +122,10 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
                         Toast.makeText(context, "Improper Input Format!", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    pusherHelper.trigger(context, Integer.parseInt(result[0]), Integer.parseInt(result[1]), Integer.parseInt(result[2]));
+                    pusherHelper.trigger(context, DeviceIndex, Integer.parseInt(result[0]), Integer.parseInt(result[1]), Integer.parseInt(result[2]));
                 }
                 else{
-                    pusherHelper.trigger(context, Color.red(DefaultColor), Color.green(DefaultColor), Color.blue(DefaultColor));
+                    pusherHelper.trigger(context, DeviceIndex, Color.red(DefaultColor), Color.green(DefaultColor), Color.blue(DefaultColor));
                     DefaultColor = 0;
                 }
                 binding.previewSelectedColor.setBackgroundColor(-5592406);

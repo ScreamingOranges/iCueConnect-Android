@@ -15,6 +15,7 @@ import androidx.palette.graphics.Palette;
 import com.pusher.rest.Pusher;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -87,7 +88,7 @@ public class PusherHelper {
         return pusherClient.devices;
     }
 
-    public void trigger(Context context, int r, int g, int b){
+    public void trigger(Context context, int DeviceIndex, int r, int g, int b){
         if(!pusherCredentials.isEmpty()) {
             Thread thread = new Thread(new Runnable() {
                 @Override
@@ -97,7 +98,11 @@ public class PusherHelper {
                         rgbValues.add(r);
                         rgbValues.add(g);
                         rgbValues.add(b);
-                        pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("RGB_SOLID", rgbValues));
+
+                        Map<String, List<Integer>> data = new HashMap<String, List<Integer>>();
+                        data.put("RGB_SOLID", rgbValues);
+                        data.put("RGB_DEVICE", Collections.singletonList(DeviceIndex));
+                        pusher.trigger("RGB_CONN", "PULSE", data);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
