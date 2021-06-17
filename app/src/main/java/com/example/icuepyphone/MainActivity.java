@@ -41,8 +41,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         context = getApplicationContext();
         switch (item.getItemId()) {
             case R.id.sync_devices:
-                devices = pusherHelper.requestDevices(this);
-                Utility.assignSpinner(devices, this, binding);
+                pusherHelper.requestDevices(this, binding);
                 return true;
             case R.id.reset_Control:
                 pusherHelper.resetControl(context);
@@ -72,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         DefaultColor = 0;
         new NotificationListener().setListener(this) ;
         pusherHelper = new PusherHelper(context);
-        //devices = pusherHelper.requestDevices(context);
 
         Utility.assignSpinner(devices, this, binding);
 

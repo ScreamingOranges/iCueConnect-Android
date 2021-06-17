@@ -12,6 +12,8 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.widget.Toast;
 import androidx.palette.graphics.Palette;
+
+import com.example.icuepyphone.databinding.ActivityMainBinding;
 import com.pusher.rest.Pusher;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,7 +61,7 @@ public class PusherHelper {
         }
     }
 
-    public Map<String,String> requestDevices(Context context){
+    public void requestDevices(Context context, ActivityMainBinding binding){
         if(!pusherCredentials.isEmpty()) {
             Thread thread = new Thread(new Runnable() {
                 @Override
@@ -75,17 +77,27 @@ public class PusherHelper {
             try { thread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
             if (null != msg) { msg.cancel(); }
             msg = Toast.makeText(context, "Requesting Devices From API", Toast.LENGTH_SHORT);
+            Integer counter = 0;
+            while (pusherClient.devices == null) {
+                counter +=1;
+                if(counter==20){
+                    break;
+                }
+                try { Thread.sleep(100); }
+                catch (final InterruptedException e) { e.printStackTrace(); }
+            }
+            if(counter == 20){
+                Utility.showNotice(context, "Error",
+                "Unable To Communicate With The iCueConnect API. Make Sure It's Installed And Running On Your PC.");
+                return;
+            }
+            Utility.assignSpinner(pusherClient.devices, context, binding);
         }
         else {
             if(null != msg){ msg.cancel(); }
             msg = Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT);
         }
         msg.show();
-        while (pusherClient.devices == null) {
-            try { Thread.sleep(100); }
-            catch (final InterruptedException e) { e.printStackTrace(); }
-        }
-        return pusherClient.devices;
     }
 
     public void trigger(Context context, int DeviceIndex, int r, int g, int b){
