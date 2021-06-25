@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +21,7 @@ import top.defaults.colorpicker.ColorObserver;
 
 public class MainActivity extends AppCompatActivity implements InterfaceNotificationListener{
     private ActivityMainBinding binding;
+    private Toast msg;
     private Map<String,String> devices;
     private String inputRGB;
     private Context context;
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         context = getApplicationContext();
         switch (item.getItemId()) {
             case R.id.sync_devices:
-                pusherHelper.requestDevices(this, binding);
+                requestDeviceHelper(this);
                 return true;
             case R.id.reset_Control:
                 pusherHelper.resetControl(context);
@@ -135,6 +137,39 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
     @Override
     public void setValue(String packageName) {
         pusherHelper.setLedNotification(context, packageName);
+    }
+
+    public void requestDeviceHelper(Context context){
+        if(!pusherHelper.pusherCredentials.isEmpty()){
+            if (null != msg) { msg.cancel(); }
+            msg = Toast.makeText(context, "Requesting Devices From API", Toast.LENGTH_SHORT);
+            new requestDeviceHandler().execute(context);
+        }
+        else{
+            if(null != msg){ msg.cancel(); }
+            msg = Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT);
+        }
+        msg.show();
+    }
+
+    private class requestDeviceHandler extends AsyncTask<Context, Void, Context>{
+        @Override
+        protected Context doInBackground(Context... context) {
+            pusherHelper.requestDevices(context[0]);
+            return context[0];
+        }
+
+        @Override
+        protected void onPostExecute(Context context) {
+            super.onPostExecute(context);
+            if(!pusherHelper.checkDeviceIfNull()){
+                pusherHelper.setSpinner(context, binding);
+            }
+            else{
+                Utility.showNotice(context, "Error",
+                        "Unable To Communicate With The iCueConnect API. Make Sure It's Installed And Running On Your PC.");
+            }
+        }
     }
 
 }

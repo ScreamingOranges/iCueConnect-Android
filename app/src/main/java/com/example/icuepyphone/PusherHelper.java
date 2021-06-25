@@ -61,43 +61,24 @@ public class PusherHelper {
         }
     }
 
-    public void requestDevices(Context context, ActivityMainBinding binding){
-        if(!pusherCredentials.isEmpty()) {
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("Request_SubDevices", ""));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            thread.start();
-            try { thread.join(); } catch (InterruptedException e) { e.printStackTrace(); }
-            if (null != msg) { msg.cancel(); }
-            msg = Toast.makeText(context, "Requesting Devices From API", Toast.LENGTH_SHORT);
-            Integer counter = 0;
-            while (pusherClient.devices == null) {
-                counter +=1;
-                if(counter==20){
-                    break;
-                }
-                try { Thread.sleep(100); }
-                catch (final InterruptedException e) { e.printStackTrace(); }
-            }
-            if(counter == 20){
-                Utility.showNotice(context, "Error",
-                "Unable To Communicate With The iCueConnect API. Make Sure It's Installed And Running On Your PC.");
-                return;
-            }
-            Utility.assignSpinner(pusherClient.devices, context, binding);
+    public Boolean checkDeviceIfNull(){
+        return pusherClient.devices == null;
+    }
+
+    public void requestDevices(Context context){
+        if(!pusherCredentials.isEmpty()){
+            pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("Request_SubDevices", ""));
         }
-        else {
-            if(null != msg){ msg.cancel(); }
-            msg = Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT);
+        try { Thread.sleep(500); } catch (final InterruptedException e) { e.printStackTrace(); }
+    }
+
+    public void setSpinner(Context context, ActivityMainBinding binding){
+        if(pusherClient.devices == null){
+            Utility.showNotice(context, "Error",
+                    "Unable To Communicate With The iCueConnect API. Make Sure It's Installed And Running On Your PC.");
+            return;
         }
-        msg.show();
+        Utility.assignSpinner(pusherClient.devices, context, binding);
     }
 
     public void trigger(Context context, int DeviceIndex, int r, int g, int b){
