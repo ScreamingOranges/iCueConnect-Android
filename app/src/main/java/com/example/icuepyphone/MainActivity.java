@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         pusherHelper = new PusherHelper(context);
 
         Utility.assignSpinner(devices, this, binding);
+        requestDeviceHelper(this);
 
         binding.colorPicker.setInitialColor(Color.GREEN);
 

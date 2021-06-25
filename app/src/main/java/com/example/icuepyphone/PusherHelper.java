@@ -66,6 +66,7 @@ public class PusherHelper {
     }
 
     public void requestDevices(Context context){
+        try { Thread.sleep(500); } catch (final InterruptedException e) { e.printStackTrace(); }
         if(!pusherCredentials.isEmpty()){
             pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("Request_SubDevices", ""));
         }
