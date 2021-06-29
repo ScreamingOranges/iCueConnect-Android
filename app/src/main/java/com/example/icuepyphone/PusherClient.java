@@ -1,5 +1,9 @@
 package com.example.icuepyphone;
 
+import android.content.Context;
+
+import androidx.core.content.ContextCompat;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,19 +23,32 @@ public class PusherClient {
     public Map<String,String> devices;
     private Pusher pusher;
     private PusherOptions options;
+    private Context mainContext;
 
-    public PusherClient(ArrayList<String> pusherCredentials){
+    public PusherClient(ArrayList<String> pusherCredentials, Context context){
+        mainContext = context;
         options = new PusherOptions().setCluster(pusherCredentials.get(3));
         pusher = new Pusher(pusherCredentials.get(1), options);
     }
 
     public void eventHandler(PusherEvent event){
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-            devices =  mapper.readValue(event.getData(), HashMap.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+        switch (event.getEventName()){
+            case "test_event":
+                ContextCompat.getMainExecutor(mainContext).execute(()  -> {
+                    Utility.showNotice(mainContext, "Notice!", event.getData());
+                });
+                break;
+            case "api_event":
+                try {
+                    ObjectMapper mapper = new ObjectMapper();
+                    mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+                    devices =  mapper.readValue(event.getData(), HashMap.class);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                System.out.println("UNRECOGNISED EVENT");
         }
     }
 
@@ -56,13 +73,13 @@ public class PusherClient {
 
             @Override
             public void onEvent(PusherEvent event) {
-                //System.out.println(String.format("Received event [%s]", event.toString()));
+                //System.out.println(String.format("Received event [%s]", event.getEventName()));
                 eventHandler(event);
             }
         };
 
         pusher.connect(connectionEventListener);
-        Channel channel = pusher.subscribe("api_Callback", channelEventListener, "api_event");
+        Channel channel = pusher.subscribe("api_Callback", channelEventListener, "api_event", "test_event");
 
 
         while (true) {

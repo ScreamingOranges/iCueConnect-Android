@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
 
         DefaultColor = 0;
         new NotificationListener().setListener(this) ;
-        pusherHelper = new PusherHelper(context);
+        pusherHelper = new PusherHelper(MainActivity.this);
 
         Utility.assignSpinner(devices, this, binding);
         requestDeviceHelper(this);

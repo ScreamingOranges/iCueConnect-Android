@@ -46,7 +46,7 @@ public class PusherHelper {
         if(!pusherCredentials.isEmpty()){
             pusher = new Pusher(pusherCredentials.get(0), pusherCredentials.get(1), pusherCredentials.get(2));
             pusher.setCluster(pusherCredentials.get(3));
-            pusherClient = new PusherClient(pusherCredentials);
+            pusherClient = new PusherClient(pusherCredentials, context);
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run(){
