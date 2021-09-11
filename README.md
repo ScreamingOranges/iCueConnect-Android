@@ -100,7 +100,7 @@ This option can be enabled from the **Notification Leds** option in the android 
     * Make sure that iCue is running in the background and that the **Enable SDK** option is set in the settings.
     * Sometimes iCue will need to be reopened. Try that.
     * Make sure your Pusher credentials are correct on both devices. 
-        > Note: If you enter any of the values incorrectly, simply go into the iCueConnect folder that we created earlier, delete the **data.json** file, and run the iCueConnect.exe again.
+        > Note: If you enter any of the values incorrectly in the [iCueConnect-API](https://github.com/ScreamingOranges/iCueConnect-API), simply right click on the iCueConnect app icon in the system tray and click Pusher Credentials.
     * Pusher credentials are correct, but leds are still not updating? Try running iCueConnect.exe as an administrator.
 * Leds are extremely delayed?
     * Leds on occasion can become delayed, however if there is a continues long delay then try setting iCueConnect's priority to realtime or high. Don't know how to do this? Check this [tutorial](https://winaero.com/change-process-priority-windows-10/) out then!
