@@ -56,6 +56,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     public Cursor getData(){
         SQLiteDatabase db = this.getWritableDatabase();
+        /*Get last record from table*/
         String query = "SELECT * FROM " + TABLE_NAME + " ORDER BY " + COLUMN_NAME_ID + " DESC LIMIT 1";
         Cursor data = db.rawQuery(query, null);
         return data;
