@@ -13,7 +13,8 @@ import java.util.Map;
 public class Utility {
 
     private Utility(){}
-    
+
+    //help assign main screen spinner with devices
     public static void assignSpinner(Map<String,String> passed, Context context, ActivityMainBinding binding){
         ArrayList<String> deviceList = new ArrayList<>();
         deviceList.add("All Devices");
@@ -27,6 +28,7 @@ public class Utility {
         binding.commandsSpinner.setAdapter(adapter);
     }
 
+    //Pop up notification helper
     public static void showNotice(Context context, String title, String message){
         AlertDialog.Builder dialog=new AlertDialog.Builder(context);
         dialog.setMessage(message);

@@ -31,22 +31,32 @@ public class PusherHelper {
 
 
     public PusherHelper(Context context){
+        //Connect to database
         mDatabaseHelper = new DatabaseHelper(context);
+        //Get last record from database table
         Cursor data = mDatabaseHelper.getData();
-
+        //Parse and store record for pusher credentials only if record exists.
         if((data != null) && (data.getCount() > 0)){
             while(data.moveToNext()){
+                //Store Pusher app_id
                 pusherCredentials.add(data.getString(1));
+                //Store Pusher key
                 pusherCredentials.add(data.getString(2));
+                //Store Pusher secret
                 pusherCredentials.add(data.getString(3));
+                //Store Pusher cluster
                 pusherCredentials.add(data.getString(4));
             }
         }
-
+        /*Check that Pusher credentials exist before establishing Pusher
+        * connections for sending and receiving data*/
         if(!pusherCredentials.isEmpty()){
+            //Create Pusher object for sending data
             pusher = new Pusher(pusherCredentials.get(0), pusherCredentials.get(1), pusherCredentials.get(2));
             pusher.setCluster(pusherCredentials.get(3));
+            //Create Pusher object for receiving data
             pusherClient = new PusherClient(pusherCredentials, context);
+            /*Create thread that listens to Pusher channel for messages from iCue connect api*/
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run(){
@@ -65,6 +75,7 @@ public class PusherHelper {
         return pusherClient.devices == null;
     }
 
+    //Request devices connect iCUE from iCue connect api
     public void requestDevices(Context context){
         try { Thread.sleep(500); } catch (final InterruptedException e) { e.printStackTrace(); }
         if(!pusherCredentials.isEmpty()){
@@ -73,6 +84,7 @@ public class PusherHelper {
         try { Thread.sleep(500); } catch (final InterruptedException e) { e.printStackTrace(); }
     }
 
+    //Sets main activity spinner to contain all received devices from iCue connect api
     public void setSpinner(Context context, ActivityMainBinding binding){
         if(pusherClient.devices == null){
             Utility.showNotice(context, "Error",
@@ -82,6 +94,7 @@ public class PusherHelper {
         Utility.assignSpinner(pusherClient.devices, context, binding);
     }
 
+    //Send Pusher data to iCue connect api to update leds according to device.
     public void trigger(Context context, int DeviceIndex, int r, int g, int b){
         if(!pusherCredentials.isEmpty()) {
             Thread thread = new Thread(new Runnable() {
@@ -104,6 +117,7 @@ public class PusherHelper {
             });
             thread.start();
         }
+        //Toast if no credentials in DB
         else {
             if(null != msg){
                 msg.cancel();
@@ -113,6 +127,7 @@ public class PusherHelper {
         }
     }
 
+    //Give control back to iCUE
     public void resetControl(Context context){
         if(pusher != null) {
             Thread thread = new Thread(new Runnable() {
@@ -140,6 +155,7 @@ public class PusherHelper {
         msg.show();
     }
 
+    //Set leds according to notification's app color
     public void setLedNotification(Context context, String packageName){
         Thread thread = new Thread(new Runnable() {
             @Override

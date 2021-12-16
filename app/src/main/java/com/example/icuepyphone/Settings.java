@@ -23,16 +23,21 @@ public class Settings extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //basic page setup essentials
         super.onCreate(savedInstanceState);
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
         context = getApplicationContext();
+
+        //Create DB object for getting pusher credentials
         mDatabaseHelper = new DatabaseHelper(this);
+        //Set up spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.cluster_spinner, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.clusterSpinner.setAdapter(adapter);
 
+        //Get Pusher credentials and populate fields
         Cursor data = mDatabaseHelper.getData();
         if((data != null) && (data.getCount() > 0)){
             ArrayList<String> pusherCredentials = new ArrayList<>();
@@ -48,7 +53,7 @@ public class Settings extends AppCompatActivity {
             binding.clusterSpinner.setSelection(adapter.getPosition(pusherCredentials.get(3)));
         }
 
-
+        //On click save credentials to DB
         binding.buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,6 +72,7 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        //Enable notification listener
         binding.ButtonLedNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

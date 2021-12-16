@@ -27,17 +27,20 @@ public class PusherClient {
 
     public PusherClient(ArrayList<String> pusherCredentials, Context context){
         mainContext = context;
+        //Make pusher receiving object
         options = new PusherOptions().setCluster(pusherCredentials.get(3));
         pusher = new Pusher(pusherCredentials.get(1), options);
     }
 
     public void eventHandler(PusherEvent event){
         switch (event.getEventName()){
+            //For running test command from iCue connect API that shows pop up in app
             case "test_event":
                 ContextCompat.getMainExecutor(mainContext).execute(()  -> {
                     Utility.showNotice(mainContext, "Notice!", event.getData());
                 });
                 break;
+            //For receiving devices from iCue connect API
             case "api_event":
                 try {
                     ObjectMapper mapper = new ObjectMapper();

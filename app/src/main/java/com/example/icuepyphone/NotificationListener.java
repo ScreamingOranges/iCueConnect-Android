@@ -21,18 +21,20 @@ public class NotificationListener extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
+        //Prevent being called twice for apps that use group summary notification alongside other notifications.
         if ((sbn.getNotification().flags & Notification.FLAG_GROUP_SUMMARY) != 0) {
             return;
         }
+        //If current notification is same as last notification, then ignore
         else if(previousApp.equals(sbn.getPackageName())){
             return;
         }
+        //If new notification set as last notification and set value
         else{
             previousApp = sbn.getPackageName();
             INL.setValue(sbn.getPackageName());
         }
     }
-
 
     public void setListener(InterfaceNotificationListener INL){
         NotificationListener.INL = INL;

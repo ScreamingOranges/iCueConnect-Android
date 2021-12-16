@@ -64,17 +64,23 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //basic page setup essentials
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
+        //variable for storing color value
         DefaultColor = 0;
+        //Create notification listener for setting leds to apps color
         new NotificationListener().setListener(this) ;
+        //Primary object for interacting with pusher
         pusherHelper = new PusherHelper(MainActivity.this);
 
+        //Assigns map to spinner
         Utility.assignSpinner(devices, this, binding);
+        //request devices connected to iCUE from API
         requestDeviceHelper(this);
 
         binding.colorPicker.setInitialColor(Color.GREEN);
@@ -140,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         pusherHelper.setLedNotification(context, packageName);
     }
 
+    //Helps preform request for devices connected to iCUE from API
     public void requestDeviceHelper(Context context){
         if(!pusherHelper.pusherCredentials.isEmpty()){
             if (null != msg) { msg.cancel(); }
@@ -153,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         msg.show();
     }
 
+    //AsyncTask that actually preforms request for devices in iCUE
     private class requestDeviceHandler extends AsyncTask<Context, Void, Context>{
         @Override
         protected Context doInBackground(Context... context) {
