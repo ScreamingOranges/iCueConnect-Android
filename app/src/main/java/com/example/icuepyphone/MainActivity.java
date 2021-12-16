@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
     //Global toast to track if a toast is set at a given moment
     private Toast msg;
     private Context context;
-    private int DefaultColor;
+    private int DefaultColor = 0;
     private int DeviceIndex;
     private Boolean isLive = false;
     private PusherHelper pusherHelper;
@@ -69,8 +69,6 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         View view = binding.getRoot();
         setContentView(view);
 
-        //variable for storing color value
-        DefaultColor = 0;
         //Create notification listener for setting leds to apps color
         new NotificationListener().setListener(this) ;
         //Primary object for interacting with pusher
