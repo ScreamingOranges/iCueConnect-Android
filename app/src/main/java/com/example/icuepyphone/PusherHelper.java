@@ -34,7 +34,7 @@ public class PusherHelper {
         //Connect to database
         mDatabaseHelper = new DatabaseHelper(context);
         //Get last record from database table
-        Cursor data = mDatabaseHelper.getData();
+        Cursor data = mDatabaseHelper.getDataFromPusherCredentials();
         //Parse and store record for pusher credentials only if record exists.
         if((data != null) && (data.getCount() > 0)){
             while(data.moveToNext()){

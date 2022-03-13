@@ -38,7 +38,7 @@ public class Settings extends AppCompatActivity {
         binding.clusterSpinner.setAdapter(adapter);
 
         //Get Pusher credentials and populate fields
-        Cursor data = mDatabaseHelper.getData();
+        Cursor data = mDatabaseHelper.getDataFromPusherCredentials();
         if((data != null) && (data.getCount() > 0)){
             ArrayList<String> pusherCredentials = new ArrayList<>();
             while(data.moveToNext()){
@@ -65,7 +65,7 @@ public class Settings extends AppCompatActivity {
                     Toast.makeText(context, "Please Fill In All Fields.", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    boolean dbInsertResult = mDatabaseHelper.addData(app_id, key, secret, cluster);
+                    boolean dbInsertResult = mDatabaseHelper.addDataToPusherCredentials(app_id, key, secret, cluster);
                     String dbInsertToast = dbInsertResult ? "Pusher Credentials Updated." : "Pusher Credentials Update Failed.";
                     Toast.makeText(context, dbInsertToast, Toast.LENGTH_SHORT).show();
                 }

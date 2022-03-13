@@ -2,6 +2,7 @@ package com.example.icuepyphone;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -25,8 +26,9 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
     private Context context;
     private int DefaultColor = 0;
     private int DeviceIndex;
-    private Boolean isLive = false;
+    private boolean isLive;
     private PusherHelper pusherHelper;
+    DatabaseHelper mDatabaseHelper;
 
 
     @Override
@@ -69,6 +71,16 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         View view = binding.getRoot();
         setContentView(view);
 
+        //check previous switch value from database and set
+        mDatabaseHelper = new DatabaseHelper(this);
+        Cursor data = mDatabaseHelper.getDataFromSwitchToggle();
+        if((data != null) && (data.getCount() > 0)){
+            while(data.moveToNext()){
+                isLive = (data.getInt(1) == 1) ? true : false;
+                binding.switchLive.setChecked(isLive);
+            }
+        }
+
         //Create notification listener for setting leds to apps color
         new NotificationListener().setListener(this) ;
         //Primary object for interacting with pusher
@@ -97,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 isLive = !isLive;
+                boolean dbInsertResult = mDatabaseHelper.addDataToSwitchToggle(isLive);
             }
         });
 
