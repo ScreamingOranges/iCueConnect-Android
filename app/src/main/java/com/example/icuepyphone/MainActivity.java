@@ -1,5 +1,6 @@
 package com.example.icuepyphone;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
     private int DeviceIndex;
     private boolean isLive;
     private PusherHelper pusherHelper;
-    DatabaseHelper mDatabaseHelper;
+    DatabaseHelper databaseHelper;
 
 
     @Override
@@ -41,25 +42,28 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         context = getApplicationContext();
-        switch (item.getItemId()) {
-            case R.id.sync_devices:
-                requestDeviceHelper(this);
-                return true;
-            case R.id.reset_Control:
-                pusherHelper.resetControl(context);
-                return true;
-            case R.id.help:
-                Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://github.com/ScreamingOranges/iCueConnect-Android/blob/master/README.md"));
-                startActivity(intent);
-                return true;
-            case R.id.settings:
-                Intent settings = new Intent(this, Settings.class);
-                startActivity(settings);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemID = item.getItemId();
+        if (itemID == R.id.sync_devices){
+            requestDeviceHelper(this);
+            return true;
         }
-
+        else if(itemID == R.id.reset_Control){
+            pusherHelper.resetControl(context);
+            return true;
+        }
+        else if(itemID == R.id.help){
+            Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://github.com/ScreamingOranges/iCueConnect-Android/blob/master/README.md"));
+            startActivity(intent);
+            return true;
+        }
+        else if(itemID == R.id.settings){
+            Intent settings = new Intent(this, Settings.class);
+            startActivity(settings);
+            return true;
+        }
+        else{
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -72,11 +76,11 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         setContentView(view);
 
         //check previous switch value from database and set
-        mDatabaseHelper = new DatabaseHelper(this);
-        Cursor data = mDatabaseHelper.getDataFromSwitchToggle();
+        databaseHelper = new DatabaseHelper(this);
+        Cursor data = databaseHelper.getDataFromSwitchToggle();
         if((data != null) && (data.getCount() > 0)){
             while(data.moveToNext()){
-                isLive = (data.getInt(1) == 1) ? true : false;
+                isLive = data.getInt(1) == 1;
                 binding.switchLive.setChecked(isLive);
             }
         }
@@ -109,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 isLive = !isLive;
-                boolean dbInsertResult = mDatabaseHelper.addDataToSwitchToggle(isLive);
+                boolean dbInsertResult = databaseHelper.addDataToSwitchToggle(isLive);
             }
         });
 
@@ -160,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
     }
 
     //Helps preform request for devices connected to iCUE from API
+    @SuppressLint("ShowToast")
     public void requestDeviceHelper(Context context){
         if(!pusherHelper.pusherCredentials.isEmpty()){
             if (msg != null) { msg.cancel(); }
