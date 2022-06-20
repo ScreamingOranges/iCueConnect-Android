@@ -26,7 +26,6 @@ import java.util.Map;
 import top.defaults.colorpicker.ColorObserver;
 
 public class MainActivity extends AppCompatActivity implements InterfaceNotificationListener{
-    private static ActivityMainBinding binding;
     private static PusherHelper pusherHelper;
     //Global toast to track if a toast is set at a given moment
     private Toast ToastMessage;
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
     private int DeviceIndex;
     private boolean isLive;
     private DatabaseHelper databaseHelper;
-
+    private ActivityMainBinding binding;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -196,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
     }
 
     //AsyncTask that actually preforms request for devices in iCUE
-    private static class requestDeviceHandler extends AsyncTask<Context, Void, Context>{
+    private class requestDeviceHandler extends AsyncTask<Context, Void, Context>{
         @Override
         protected Context doInBackground(Context... context) {
             pusherHelper.requestDevices(context[0]);
@@ -217,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
     }
 
     //Assign main screen spinner with devices
-    private static void assignSpinner(Map<String,String> passed, Context context){
+    private void assignSpinner(Map<String,String> passed, Context context){
         ArrayList<String> deviceList = new ArrayList<>();
         deviceList.add("All Devices");
 
