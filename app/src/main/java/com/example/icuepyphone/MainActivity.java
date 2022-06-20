@@ -13,22 +13,27 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.icuepyphone.databinding.ActivityMainBinding;
+
+import java.util.ArrayList;
+import java.util.Map;
+
 import top.defaults.colorpicker.ColorObserver;
 
 public class MainActivity extends AppCompatActivity implements InterfaceNotificationListener{
-    private ActivityMainBinding binding;
+    private static ActivityMainBinding binding;
+    private static PusherHelper pusherHelper;
     //Global toast to track if a toast is set at a given moment
     private Toast ToastMessage;
     private int DefaultColor = 0;
     private int DeviceIndex;
     private boolean isLive;
-    private PusherHelper pusherHelper;
-    DatabaseHelper databaseHelper;
+    private DatabaseHelper databaseHelper;
 
 
     @Override
@@ -82,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         pusherHelper = new PusherHelper(this);
 
         //Assigns values to spinner
-        Utility.assignSpinner(null, this, binding);
+        assignSpinner(null, this);
 
         //request devices connected to iCUE from API
         requestDeviceHelper(this);
@@ -191,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
     }
 
     //AsyncTask that actually preforms request for devices in iCUE
-    private class requestDeviceHandler extends AsyncTask<Context, Void, Context>{
+    private static class requestDeviceHandler extends AsyncTask<Context, Void, Context>{
         @Override
         protected Context doInBackground(Context... context) {
             pusherHelper.requestDevices(context[0]);
@@ -202,7 +207,12 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         protected void onPostExecute(Context context) {
             super.onPostExecute(context);
             if(!pusherHelper.checkDeviceIfNull()){
-                pusherHelper.setSpinner(context, binding);
+                if(pusherHelper.pusherClient.devices == null){
+                    Utility.showNotice(context, "Error",
+                            "Unable To Communicate With The iCueConnect API. Make Sure It's Installed And Running On Your PC.");
+                    return;
+                }
+                assignSpinner(pusherHelper.pusherClient.devices, context);
             }
             else{
                 Utility.showNotice(context, "Error",
@@ -211,4 +221,17 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         }
     }
 
+    //Assign main screen spinner with devices
+    private static void assignSpinner(Map<String,String> passed, Context context){
+        ArrayList<String> deviceList = new ArrayList<>();
+        deviceList.add("All Devices");
+
+        if(passed != null){
+            for (Map.Entry<String,String> entry : passed.entrySet()){
+                deviceList.add(entry.getValue());
+            }
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.simple_spinner_item, deviceList);
+        binding.commandsSpinner.setAdapter(adapter);
+    }
 }

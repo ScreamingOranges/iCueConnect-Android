@@ -14,20 +14,6 @@ public class Utility {
 
     private Utility(){}
 
-    //help assign main screen spinner with devices
-    public static void assignSpinner(Map<String,String> passed, Context context, ActivityMainBinding binding){
-        ArrayList<String> deviceList = new ArrayList<>();
-        deviceList.add("All Devices");
-
-        if(passed != null){
-            for (Map.Entry<String,String> entry : passed.entrySet()){
-                deviceList.add(entry.getValue());
-            }
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.simple_spinner_item, deviceList);
-        binding.commandsSpinner.setAdapter(adapter);
-    }
-
     //Pop up notification helper
     public static void showNotice(Context context, String title, String message){
         AlertDialog.Builder dialog=new AlertDialog.Builder(context);

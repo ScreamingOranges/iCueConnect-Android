@@ -25,8 +25,8 @@ public class PusherHelper {
     private Toast msg;
     private List<Integer> rgbValues = new ArrayList<Integer>();
     private Pusher pusher;
-    private PusherClient pusherClient;
     private DatabaseHelper mDatabaseHelper;
+    public PusherClient pusherClient;
     public ArrayList<String> pusherCredentials = new ArrayList<>();
 
 
@@ -82,16 +82,6 @@ public class PusherHelper {
             pusher.trigger("RGB_CONN", "PULSE", Collections.singletonMap("Request_SubDevices", ""));
         }
         try { Thread.sleep(500); } catch (final InterruptedException e) { e.printStackTrace(); }
-    }
-
-    //Sets main activity spinner to contain all received devices from iCue connect api
-    public void setSpinner(Context context, ActivityMainBinding binding){
-        if(pusherClient.devices == null){
-            Utility.showNotice(context, "Error",
-                    "Unable To Communicate With The iCueConnect API. Make Sure It's Installed And Running On Your PC.");
-            return;
-        }
-        Utility.assignSpinner(pusherClient.devices, context, binding);
     }
 
     //Send Pusher data to iCue connect api to update leds according to device.
