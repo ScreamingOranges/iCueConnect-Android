@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
     private ActivityMainBinding binding;
     //Global toast to track if a toast is set at a given moment
     private Toast msg;
-    private Context context;
     private int DefaultColor = 0;
     private int DeviceIndex;
     private boolean isLive;
@@ -41,14 +40,13 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        context = getApplicationContext();
         int itemID = item.getItemId();
         if (itemID == R.id.sync_devices){
             requestDeviceHelper(this);
             return true;
         }
         else if(itemID == R.id.reset_Control){
-            pusherHelper.resetControl(context);
+            pusherHelper.resetControl(getApplicationContext());
             return true;
         }
         else if(itemID == R.id.help){
@@ -72,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        context = getApplicationContext();
         //endregion
 
         //check previous switch value from database and set
@@ -88,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         //Create notification listener for setting leds to apps color
         new NotificationListener().setListener(this) ;
         //Primary object for interacting with pusher
-        pusherHelper = new PusherHelper(MainActivity.this);
+        pusherHelper = new PusherHelper(this);
 
         //Assigns map to spinner
         Utility.assignSpinner(null, this, binding);
@@ -123,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
                 DefaultColor = color;
                 binding.previewSelectedColor.setBackgroundColor(color);
                 if (isLive){
-                    pusherHelper.trigger(context, DeviceIndex, Color.red(color), Color.green(color), Color.blue(color));
+                    pusherHelper.trigger(getApplicationContext(), DeviceIndex, Color.red(color), Color.green(color), Color.blue(color));
                 }
             }
         });
@@ -135,21 +132,21 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
                 String[] result = inputRGB.split("\\s+");
                 if((inputRGB.isEmpty()) && (DefaultColor == 0) ){
                     if (msg != null) { msg.cancel(); }
-                    msg = Toast.makeText(context, "ENTER/CHOOSE AN RGB VALUE", Toast.LENGTH_SHORT);
+                    msg = Toast.makeText(getApplicationContext(), "ENTER/CHOOSE AN RGB VALUE", Toast.LENGTH_SHORT);
                     msg.show();
                 }
                 else if(!inputRGB.isEmpty()) {
                     if(!inputRGB.matches("\\d{1,3}\\s+\\d{1,3}\\s+\\d{1,3}")){
                         binding.inputRGBVal.setText("");
                         if (msg != null) { msg.cancel(); }
-                        msg = Toast.makeText(context, "Improper Input Format!", Toast.LENGTH_SHORT);
+                        msg = Toast.makeText(getApplicationContext(), "Improper Input Format!", Toast.LENGTH_SHORT);
                         msg.show();
                         return;
                     }
-                    pusherHelper.trigger(context, DeviceIndex, Integer.parseInt(result[0]), Integer.parseInt(result[1]), Integer.parseInt(result[2]));
+                    pusherHelper.trigger(getApplicationContext(), DeviceIndex, Integer.parseInt(result[0]), Integer.parseInt(result[1]), Integer.parseInt(result[2]));
                 }
                 else{
-                    pusherHelper.trigger(context, DeviceIndex, Color.red(DefaultColor), Color.green(DefaultColor), Color.blue(DefaultColor));
+                    pusherHelper.trigger(getApplicationContext(), DeviceIndex, Color.red(DefaultColor), Color.green(DefaultColor), Color.blue(DefaultColor));
                 }
                 DefaultColor = 0;
                 binding.previewSelectedColor.setBackgroundColor(-5592406);
@@ -160,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
 
     @Override
     public void setValue(String packageName) {
-        pusherHelper.setLedNotification(context, packageName);
+        pusherHelper.setLedNotification(this, packageName);
     }
 
     //Helps preform request for devices connected to iCUE from API
@@ -168,12 +165,12 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
     public void requestDeviceHelper(Context context){
         if(!pusherHelper.pusherCredentials.isEmpty()){
             if (msg != null) { msg.cancel(); }
-            msg = Toast.makeText(context, "Requesting Devices From API", Toast.LENGTH_SHORT);
+            msg = Toast.makeText(getApplicationContext(), "Requesting Devices From API", Toast.LENGTH_SHORT);
             new requestDeviceHandler().execute(context);
         }
         else{
             if(msg != null){ msg.cancel(); }
-            msg = Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT);
+            msg = Toast.makeText(getApplicationContext(), "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT);
         }
         msg.show();
     }
