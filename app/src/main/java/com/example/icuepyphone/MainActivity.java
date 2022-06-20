@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         Cursor data = databaseHelper.getDataFromSwitchToggle();
         if((data != null) && (data.getCount() > 0)){
             while(data.moveToNext()){
-                isLive = data.getInt(1) == 1;
+                isLive = data.getInt(DatabaseHelper.SwitchToggleIndexes.Switch) == 1;
                 binding.switchLive.setChecked(isLive);
             }
         }
@@ -206,12 +206,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
         @Override
         protected void onPostExecute(Context context) {
             super.onPostExecute(context);
-            if(!pusherHelper.checkDeviceIfNull()){
-                if(pusherHelper.pusherClient.devices == null){
-                    Utility.showNotice(context, "Error",
-                            "Unable To Communicate With The iCueConnect API. Make Sure It's Installed And Running On Your PC.");
-                    return;
-                }
+            if(pusherHelper.pusherClient.devices != null){
                 assignSpinner(pusherHelper.pusherClient.devices, context);
             }
             else{

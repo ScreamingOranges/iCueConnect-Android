@@ -7,6 +7,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+    public static final class PusherCredentialsIndexes{
+        public static final int AppID = 1;
+        public static final int Key = 2;
+        public static final int Secret = 3;
+        public static final int Cluster = 4;
+    }
+
+    public static final class SwitchToggleIndexes{
+        public static final int Switch = 1;
+    }
+
     private static final String iCueConnectDB = "iCueConnectDB";
     // If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 2;

@@ -1,5 +1,6 @@
 package com.example.icuepyphone;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -13,7 +14,6 @@ import android.graphics.drawable.LayerDrawable;
 import android.widget.Toast;
 import androidx.palette.graphics.Palette;
 
-import com.example.icuepyphone.databinding.ActivityMainBinding;
 import com.pusher.rest.Pusher;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,30 +22,22 @@ import java.util.List;
 import java.util.Map;
 
 public class PusherHelper {
-    private Toast msg;
-    private List<Integer> rgbValues = new ArrayList<Integer>();
+    private Toast ToastMessage;
     private Pusher pusher;
-    private DatabaseHelper mDatabaseHelper;
     public PusherClient pusherClient;
     public ArrayList<String> pusherCredentials = new ArrayList<>();
 
-
     public PusherHelper(Context context){
-        //Connect to database
-        mDatabaseHelper = new DatabaseHelper(context);
-        //Get last record from database table
-        Cursor data = mDatabaseHelper.getDataFromPusherCredentials();
-        //Parse and store record for pusher credentials only if record exists.
+        DatabaseHelper databaseHelper = new DatabaseHelper(context);
+
+        //Get parse and store record for pusher credentials only if record exists.
+        Cursor data = databaseHelper.getDataFromPusherCredentials();
         if((data != null) && (data.getCount() > 0)){
             while(data.moveToNext()){
-                //Store Pusher app_id
-                pusherCredentials.add(data.getString(1));
-                //Store Pusher key
-                pusherCredentials.add(data.getString(2));
-                //Store Pusher secret
-                pusherCredentials.add(data.getString(3));
-                //Store Pusher cluster
-                pusherCredentials.add(data.getString(4));
+                pusherCredentials.add(data.getString(DatabaseHelper.PusherCredentialsIndexes.AppID));
+                pusherCredentials.add(data.getString(DatabaseHelper.PusherCredentialsIndexes.Key));
+                pusherCredentials.add(data.getString(DatabaseHelper.PusherCredentialsIndexes.Secret));
+                pusherCredentials.add(data.getString(DatabaseHelper.PusherCredentialsIndexes.Cluster));
             }
         }
         /*Check that Pusher credentials exist before establishing Pusher
@@ -71,10 +63,6 @@ public class PusherHelper {
         }
     }
 
-    public Boolean checkDeviceIfNull(){
-        return pusherClient.devices == null;
-    }
-
     //Request devices connect iCUE from iCue connect api
     public void requestDevices(Context context){
         try { Thread.sleep(500); } catch (final InterruptedException e) { e.printStackTrace(); }
@@ -91,6 +79,7 @@ public class PusherHelper {
                 @Override
                 public void run() {
                     try {
+                        List<Integer> rgbValues = new ArrayList<Integer>();
                         rgbValues.clear();
                         rgbValues.add(r);
                         rgbValues.add(g);
@@ -109,15 +98,14 @@ public class PusherHelper {
         }
         //Toast if no credentials in DB
         else {
-            if(null != msg){
-                msg.cancel();
-            }
-            msg = Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT);
-            msg.show();
+            if(ToastMessage != null){ ToastMessage.cancel(); }
+            ToastMessage = Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT);
+            ToastMessage.show();
         }
     }
 
     //Give control back to iCUE
+    @SuppressLint("ShowToast")
     public void resetControl(Context context){
         if(pusher != null) {
             Thread thread = new Thread(new Runnable() {
@@ -131,18 +119,14 @@ public class PusherHelper {
                 }
             });
             thread.start();
-            if(null != msg){
-                msg.cancel();
-            }
-            msg = Toast.makeText(context, "Reverting iCue's Control", Toast.LENGTH_SHORT);
+            if(ToastMessage != null){ ToastMessage.cancel(); }
+            ToastMessage = Toast.makeText(context, "Reverting iCue's Control", Toast.LENGTH_SHORT);
         }
         else{
-            if(null != msg){
-                msg.cancel();
-            }
-            msg = Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT);
+            if(ToastMessage != null){ ToastMessage.cancel(); }
+            ToastMessage = Toast.makeText(context, "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT);
         }
-        msg.show();
+        ToastMessage.show();
     }
 
     //Set leds according to notification's app color
@@ -175,6 +159,7 @@ public class PusherHelper {
                     }
                     Palette palette = Palette.from(bitmap).generate();
                     int appColor = palette.getDominantColor(Color.GREEN);
+                    List<Integer> rgbValues = new ArrayList<Integer>();
                     rgbValues.clear();
                     rgbValues.add(Color.red(appColor));
                     rgbValues.add(Color.green(appColor));
