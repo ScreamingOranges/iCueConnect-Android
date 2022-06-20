@@ -23,7 +23,7 @@ import top.defaults.colorpicker.ColorObserver;
 public class MainActivity extends AppCompatActivity implements InterfaceNotificationListener{
     private ActivityMainBinding binding;
     //Global toast to track if a toast is set at a given moment
-    private Toast msg;
+    private Toast ToastMessage;
     private int DefaultColor = 0;
     private int DeviceIndex;
     private boolean isLive;
@@ -66,14 +66,30 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //region PAGE SETUP
+        //region DEFAULT REQUIRED SETUP
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         //endregion
 
-        //check previous switch value from database and set
+
+        //region NON DEFAULT REQUIRED SET UP
         databaseHelper = new DatabaseHelper(this);
+
+        //Create notification listener for setting LEDS to apps color
+        new NotificationListener().setListener(this) ;
+
+        pusherHelper = new PusherHelper(this);
+
+        //Assigns values to spinner
+        Utility.assignSpinner(null, this, binding);
+
+        //request devices connected to iCUE from API
+        requestDeviceHelper(this);
+        //endregion
+
+
+        //region CHECK STORED SWITCH VALUE FROM DB AND UPDATE
         Cursor data = databaseHelper.getDataFromSwitchToggle();
         if((data != null) && (data.getCount() > 0)){
             while(data.moveToNext()){
@@ -81,17 +97,10 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
                 binding.switchLive.setChecked(isLive);
             }
         }
+        //endregion
 
-        //Create notification listener for setting leds to apps color
-        new NotificationListener().setListener(this) ;
-        //Primary object for interacting with pusher
-        pusherHelper = new PusherHelper(this);
 
-        //Assigns map to spinner
-        Utility.assignSpinner(null, this, binding);
-        //request devices connected to iCUE from API
-        requestDeviceHelper(this);
-
+        //region ACTIVITY HANDLERS
         binding.colorPicker.setInitialColor(Color.GREEN);
 
         binding.commandsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -111,6 +120,11 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 isLive = !isLive;
                 boolean dbInsertResult = databaseHelper.addDataToSwitchToggle(isLive);
+                if (!dbInsertResult){
+                    if(ToastMessage != null){ ToastMessage.cancel(); }
+                    ToastMessage = Toast.makeText(getApplicationContext(), "Failed To Update Database.", Toast.LENGTH_SHORT);
+                    ToastMessage.show();
+                }
             }
         });
 
@@ -131,16 +145,16 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
                 String inputRGB = binding.inputRGBVal.getText().toString();
                 String[] result = inputRGB.split("\\s+");
                 if((inputRGB.isEmpty()) && (DefaultColor == 0) ){
-                    if (msg != null) { msg.cancel(); }
-                    msg = Toast.makeText(getApplicationContext(), "ENTER/CHOOSE AN RGB VALUE", Toast.LENGTH_SHORT);
-                    msg.show();
+                    if (ToastMessage != null) { ToastMessage.cancel(); }
+                    ToastMessage = Toast.makeText(getApplicationContext(), "ENTER/CHOOSE AN RGB VALUE", Toast.LENGTH_SHORT);
+                    ToastMessage.show();
                 }
                 else if(!inputRGB.isEmpty()) {
                     if(!inputRGB.matches("\\d{1,3}\\s+\\d{1,3}\\s+\\d{1,3}")){
                         binding.inputRGBVal.setText("");
-                        if (msg != null) { msg.cancel(); }
-                        msg = Toast.makeText(getApplicationContext(), "Improper Input Format!", Toast.LENGTH_SHORT);
-                        msg.show();
+                        if (ToastMessage != null) { ToastMessage.cancel(); }
+                        ToastMessage = Toast.makeText(getApplicationContext(), "Improper Input Format!", Toast.LENGTH_SHORT);
+                        ToastMessage.show();
                         return;
                     }
                     pusherHelper.trigger(getApplicationContext(), DeviceIndex, Integer.parseInt(result[0]), Integer.parseInt(result[1]), Integer.parseInt(result[2]));
@@ -153,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
                 binding.inputRGBVal.setText("");
             }
         });
+        //endregion
     }
 
     @Override
@@ -164,15 +179,15 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
     @SuppressLint("ShowToast")
     public void requestDeviceHelper(Context context){
         if(!pusherHelper.pusherCredentials.isEmpty()){
-            if (msg != null) { msg.cancel(); }
-            msg = Toast.makeText(getApplicationContext(), "Requesting Devices From API", Toast.LENGTH_SHORT);
+            if (ToastMessage != null) { ToastMessage.cancel(); }
+            ToastMessage = Toast.makeText(getApplicationContext(), "Requesting Devices From API", Toast.LENGTH_SHORT);
             new requestDeviceHandler().execute(context);
         }
         else{
-            if(msg != null){ msg.cancel(); }
-            msg = Toast.makeText(getApplicationContext(), "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT);
+            if(ToastMessage != null){ ToastMessage.cancel(); }
+            ToastMessage = Toast.makeText(getApplicationContext(), "CONFIGURE PUSHER IN SETTINGS", Toast.LENGTH_SHORT);
         }
-        msg.show();
+        ToastMessage.show();
     }
 
     //AsyncTask that actually preforms request for devices in iCUE
