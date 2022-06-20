@@ -68,12 +68,12 @@ public class MainActivity extends AppCompatActivity implements InterfaceNotifica
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //basic page setup essentials
+        //region PAGE SETUP
         super.onCreate(savedInstanceState);
-        context = getApplicationContext();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(view);
+        setContentView(binding.getRoot());
+        context = getApplicationContext();
+        //endregion
 
         //check previous switch value from database and set
         databaseHelper = new DatabaseHelper(this);
